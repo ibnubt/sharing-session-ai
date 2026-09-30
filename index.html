@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#035B71">
+  <title>AI at Work — Sharing Session</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ===========================================
+       THEME TOKENS — PLN ICON PLUS CORPORATE PALETTE
+       =========================================== */
+    :root {
+      --pln-deep: #035B71;
+      --pln-teal: #00A2B9;
+      --pln-cyan: #00AFF0;
+      --pln-yellow: #FFFF00;
+      --pln-red: #FF0000;
+      --ink: #073744;
+      --muted: #517583;
+      --paper: #F5FBFD;
+      --white: #FFFFFF;
+      --line: rgba(3, 91, 113, .16);
+      --soft-cyan: #DDF6FC;
+      --soft-yellow: #FFFED0;
+      --soft-red: #FFF0F0;
+      --stage-bg: #DCEBF0;
+      --slide-bg: #F5FBFD;
+      --font-display: 'Archivo Black', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* ===========================================
+       GLOBAL SLIDE SYSTEM
+       =========================================== */
+    body { font-family: var(--font-body); color: var(--ink); }
+    button { font: inherit; }
+    .slide {
+      background:
+        radial-gradient(circle at var(--mx, 82%) var(--my, 18%), rgba(0,175,240,.11), transparent 27%),
+        linear-gradient(135deg, transparent 0 72%, rgba(0,162,185,.035) 72% 100%),
+        #F8FCFD;
+    }
+    .slide.teal-slide { --slide-bg: #F8FCFD; color: var(--ink); background: radial-gradient(circle at 82% 18%,rgba(0,175,240,.12),transparent 27%),linear-gradient(135deg,transparent 0 72%,rgba(0,162,185,.04) 72% 100%),#F8FCFD; }
+    .slide-shell { position: absolute; inset: 0; padding: 74px 88px 82px; }
+    .slide-shell::after { content: ''; position: absolute; inset: 28px; border: 1px solid rgba(3,91,113,.14); pointer-events: none; }
+    .teal-slide .slide-shell::after { border-color: rgba(3,91,113,.14); }
+    .slide-head { display: flex; align-items: flex-start; justify-content: space-between; min-height: 112px; position: relative; z-index: 4; }
+    .kicker { position: relative; padding-left: 110px; min-height: 18px; font: 600 17px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--pln-teal); }
+    .teal-slide .kicker { color: var(--pln-teal); }
+    .kicker::before { content: ''; position: absolute; left: 0; top: 5px; width: 27px; height: 7px; background: var(--pln-yellow); box-shadow: 36px 0 0 var(--pln-red), 72px 0 0 var(--pln-cyan); }
+    .brand-text { font: 600 16px/1 var(--font-mono); letter-spacing: .1em; color: var(--pln-deep); text-transform: uppercase; }
+    .teal-slide .brand-text { color: var(--pln-deep); }
+    .slide-title { margin-top: 18px; max-width: 1520px; font: 400 60px/.99 var(--font-display); letter-spacing: -.045em; color: var(--pln-deep); }
+    .teal-slide .slide-title { color: var(--pln-deep); }
+    .slide-lead { margin-top: 22px; max-width: 1280px; font-size: 29px; line-height: 1.42; color: var(--muted); }
+    .teal-slide .slide-lead { color: var(--muted); }
+    .slide-no { position: absolute; right: 88px; bottom: 53px; z-index: 5; font: 500 17px/1 var(--font-mono); letter-spacing: .12em; color: var(--pln-teal); }
+    .teal-slide .slide-no { color: var(--pln-teal); }
+    .source { position: absolute; left: 88px; bottom: 46px; width: 1380px; font-size: 14px; line-height: 1.35; color: #668892; }
+    .teal-slide .source { color: #668892; }
+    .accent { color: var(--pln-teal); }
+    .yellow { color: #929400; }
+    .red { color: var(--pln-red); }
+    .mono { font-family: var(--font-mono); }
+    .label { font: 600 15px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--pln-teal); }
+    .teal-slide .label { color: var(--pln-teal); }
+    .editable:focus { outline: 3px dashed var(--pln-red); outline-offset: 6px; }
+
+    /* ===========================================
+       ENTRANCE & AMBIENT ANIMATIONS
+       =========================================== */
+    .reveal, .reveal-left, .reveal-scale { opacity: 0; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal { transform: translateY(24px); }
+    .reveal-left { transform: translateX(-38px); }
+    .reveal-scale { transform: scale(.94); }
+    .slide.visible .reveal, .slide.visible .reveal-left, .slide.visible .reveal-scale { opacity: 1; transform: none; }
+    .d1 { transition-delay: .08s; } .d2 { transition-delay: .16s; } .d3 { transition-delay: .24s; } .d4 { transition-delay: .32s; } .d5 { transition-delay: .4s; }
+    .float { animation: float 4s ease-in-out infinite; }
+    .pulse { animation: pulse 2.3s ease-in-out infinite; }
+    .spin { animation: spin 18s linear infinite; }
+    .march { animation: march 2.4s linear infinite; }
+    @keyframes float { 50% { transform: translateY(-13px); } }
+    @keyframes pulse { 50% { transform: scale(1.06); box-shadow: 0 0 0 20px rgba(0,162,185,0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes march { to { stroke-dashoffset: -80; } }
+    @keyframes blink { 50% { opacity: .15; } }
+    @keyframes scan { from { transform: translateY(-35px); } to { transform: translateY(235px); } }
+    @keyframes countbar { from { width: 0; } }
+
+    /* ===========================================
+       REUSABLE INTERACTIVE COMPONENTS
+       =========================================== */
+    .glass { background: rgba(255,255,255,.82); border: 1px solid var(--line); box-shadow: 0 18px 55px rgba(3,91,113,.09); backdrop-filter: blur(12px); }
+    .interactive-card { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; transform-style: preserve-3d; }
+    .interactive-card:hover, .interactive-card:focus-within { border-color: var(--pln-teal); box-shadow: 0 22px 55px rgba(3,91,113,.16); }
+    .pill { display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 999px; font: 600 14px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+    .pill.blue { color: var(--pln-deep); background: var(--soft-cyan); border: 1px solid rgba(0,162,185,.25); }
+    .pill.yellow { color: #666900; background: var(--soft-yellow); border: 1px solid rgba(180,184,0,.25); }
+    .pill.red { color: #B60000; background: var(--soft-red); border: 1px solid rgba(255,0,0,.18); }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .action-btn { border: 1px solid var(--pln-teal); color: var(--pln-deep); background: var(--white); border-radius: 999px; padding: 13px 20px; font: 600 15px/1 var(--font-mono); letter-spacing: .06em; cursor: pointer; transition: .2s ease; }
+    .action-btn:hover, .action-btn.active { background: var(--pln-deep); color: var(--white); transform: translateY(-2px); }
+    .teal-slide .action-btn { background: transparent; color: white; border-color: #7DE7F6; }
+    .teal-slide .action-btn:hover, .teal-slide .action-btn.active { background: #7DE7F6; color: var(--pln-deep); }
+    .spotlight { position: absolute; width: 400px; height: 400px; border-radius: 50%; pointer-events: none; background: radial-gradient(circle, rgba(255,255,255,.25), transparent 65%); mix-blend-mode: soft-light; transform: translate(-50%,-50%); z-index: 0; opacity: .65; }
+
+    /* ===========================================
+       SLIDE 01 — TITLE / CO-BRANDING
+       =========================================== */
+    .title-layout { display: grid; grid-template-columns: 1.08fr .92fr; height: 100%; }
+    .title-left { position: relative; padding: 82px 72px 70px 92px; background: white; }
+    .title-right { position: relative; overflow: hidden; background: linear-gradient(150deg,#E9F9FC 0%,#BDEEF6 50%,#FDFEE2 100%); }
+    .title-logos { display: flex; align-items: center; gap: 34px; }
+    .title-logos img:first-child { width: 234px; }
+    .title-logos img:last-child { width: 250px; }
+    .title-kicker { margin-top: 158px; font: 600 17px/1 var(--font-mono); letter-spacing: .14em; color: var(--pln-teal); text-transform: uppercase; }
+    .title-main { margin-top: 34px; font: 400 142px/.85 var(--font-display); letter-spacing: -.075em; text-transform: uppercase; color: var(--pln-deep); }
+    .title-main .outline { color: transparent; -webkit-text-stroke: 3px var(--pln-cyan); }
+    .title-sub { margin-top: 42px; width: 760px; font-size: 30px; line-height: 1.42; color: var(--muted); }
+    .title-meta { position: absolute; left: 92px; bottom: 64px; font: 500 15px/1 var(--font-mono); letter-spacing: .1em; color: var(--pln-deep); text-transform: uppercase; }
+    .orbit-system { position: absolute; width: 720px; height: 720px; left: 80px; top: 170px; }
+    .orbit { position: absolute; inset: 66px; border: 2px solid rgba(3,91,113,.24); border-radius: 50%; }
+    .orbit.o2 { inset: 0; border-style: dashed; animation: spin 22s linear infinite; }
+    .orbit.o3 { inset: 150px; border-color: var(--pln-teal); animation: spin 15s linear infinite reverse; }
+    .orbit::before, .orbit::after { content: ''; position: absolute; width: 24px; height: 24px; border-radius: 50%; background: var(--pln-cyan); top: 38px; left: 100px; box-shadow: 0 0 0 15px rgba(0,175,240,.13); }
+    .orbit::after { top: auto; left: auto; right: 36px; bottom: 90px; background: var(--pln-red); box-shadow: 0 0 0 15px rgba(255,0,0,.1); }
+    .orbit-core { position: absolute; width: 230px; height: 230px; left: 245px; top: 245px; display: grid; place-items: center; text-align: center; border-radius: 50%; background: var(--pln-deep); color: white; box-shadow: 0 25px 70px rgba(3,91,113,.24); font: 600 21px/1.35 var(--font-mono); }
+    .orbit-label { position: absolute; font: 600 15px/1 var(--font-mono); letter-spacing: .12em; color: var(--pln-deep); }
+    .ol1 { left: 18px; top: 324px; } .ol2 { right: 12px; top: 325px; } .ol3 { left: 305px; top: 15px; } .ol4 { left: 304px; bottom: 12px; }
+
+    /* ===========================================
+       SLIDE 02 — CAPABILITY ORBITS
+       =========================================== */
+    .capability-map { position: relative; margin: 34px auto 0; width: 1700px; height: 620px; }
+    .capability-map::before { content: ''; position: absolute; left: 110px; right: 110px; top: 360px; height: 7px; background: linear-gradient(90deg,var(--pln-cyan),var(--pln-teal),var(--pln-deep)); transform: rotate(-9deg); transform-origin: center; border-radius: 8px; }
+    .cap-ring { position: absolute; width: 286px; height: 176px; border-radius: 0; border: 1px solid var(--line); border-top: 7px solid var(--pln-cyan); display: flex; align-items: flex-end; padding: 28px; font: 600 21px/1.2 var(--font-mono); letter-spacing: .03em; color: var(--pln-deep); background: rgba(255,255,255,.94); box-shadow: 0 18px 44px rgba(3,91,113,.1); transition: .3s ease; }
+    .cap-ring:hover { border-color: var(--pln-teal); transform: translateY(-8px); }
+    .cr1 { left: 18px; top: 330px; z-index: 1; }
+    .cr2 { left: 358px; top: 265px; z-index: 2; }
+    .cr3 { left: 698px; top: 200px; z-index: 3; }
+    .cr4 { left: 1038px; top: 135px; z-index: 4; }
+    .cr5 { left: 1378px; top: 70px; z-index: 5; border-top-color: var(--pln-red); background: linear-gradient(135deg,#fff,#fffed8); }
+    .cap-node { position: absolute; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; background: var(--pln-deep); border: 5px solid white; color: white; font: 600 17px/1 var(--font-mono); box-shadow: 0 12px 28px rgba(3,91,113,.18); z-index: 8; }
+    .cn1 { left: 46px; top: 292px; } .cn2 { left: 386px; top: 227px; } .cn3 { left: 726px; top: 162px; } .cn4 { left: 1066px; top: 97px; } .cn5 { left: 1406px; top: 32px; background: var(--pln-yellow); color: var(--pln-deep); border-color: white; }
+    .cap-copy { position: absolute; left: 18px; right: 36px; bottom: 15px; display: grid; grid-template-columns: repeat(5,286px); gap: 54px; font-size: 18px; color: var(--muted); text-align: center; }
+
+    /* ===========================================
+       SLIDE 03 — ADOPTION WAVE
+       =========================================== */
+    .adoption-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 42px; margin-top: 42px; height: 610px; }
+    .wave-panel { position: relative; border: 1px solid var(--line); background: rgba(255,255,255,.72); overflow: hidden; }
+    .wave-labels { position: absolute; left: 55px; right: 55px; bottom: 45px; display: grid; grid-template-columns: repeat(4,1fr); font: 600 16px/1 var(--font-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--pln-deep); }
+    .wave-svg { position: absolute; inset: 45px 45px 85px; overflow: visible; }
+    .wave-svg path { fill: none; stroke: var(--pln-teal); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 18 18; }
+    .slide.visible .wave-svg path { animation: march 2.4s linear infinite; }
+    .wave-dot { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--pln-cyan); box-shadow: 0 0 0 12px rgba(0,175,240,.13); }
+    .wd1{left:78px;bottom:145px}.wd2{left:338px;bottom:280px}.wd3{left:620px;bottom:355px}.wd4{right:64px;bottom:390px;background:var(--pln-red);box-shadow:0 0 0 12px rgba(255,0,0,.1)}
+    .metric-stack { display: grid; grid-template-rows: repeat(3,1fr); gap: 18px; }
+    .metric-card { padding: 28px 30px; border-left: 8px solid var(--pln-teal); }
+    .metric-card .big { font: 400 70px/.9 var(--font-display); color: var(--pln-deep); }
+    .metric-card p { margin-top: 14px; font-size: 19px; line-height: 1.35; color: var(--muted); }
+    .gap-card { border-left-color: var(--pln-red); background: linear-gradient(135deg,#fff,#fff4f4); }
+    .gap-card .big { display: flex; align-items: baseline; gap: 18px; }
+    .gap-card .small { font: 600 22px/1 var(--font-mono); color: var(--pln-red); }
+
+    /* ===========================================
+       SLIDE 04 — MANAGER WORKDAY FLOW
+       =========================================== */
+    .dayflow { position: relative; margin-top: 38px; height: 640px; isolation: isolate; }
+    .day-line { position: absolute; left: 120px; right: 120px; top: 294px; height: 10px; overflow: hidden; background: rgba(0,162,185,.1); border-radius: 999px; box-shadow: 0 0 0 15px rgba(0,162,185,.055); z-index: 0; }
+    .day-line::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,var(--pln-cyan),var(--pln-teal),var(--pln-deep)); }
+    .day-line::after { content: ''; position: absolute; top: 0; bottom: 0; left: -20%; width: 18%; background: linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent); animation: daySheen 4.8s ease-in-out infinite; }
+    @keyframes daySheen { 0%,12%{transform:translateX(0);opacity:0} 24%{opacity:.9} 72%{opacity:.9} 84%,100%{transform:translateX(670%);opacity:0} }
+    .day-token { position: absolute; top: 270px; left: 153.5px; width: 58px; height: 58px; border-radius: 50%; background: var(--pln-yellow); border: 5px solid white; box-shadow: 0 10px 30px rgba(3,91,113,.2),0 0 0 0 rgba(255,255,0,.3); z-index: 5; will-change: transform,opacity; }
+    .day-token::after { content: ''; position: absolute; inset: 17px; border-radius: 50%; background: var(--pln-deep); opacity: .72; }
+    .slide.visible .day-token { animation: workday 12s linear .55s infinite both; }
+    @keyframes workday {
+      0%,8%{transform:translate3d(0,0,0);opacity:1;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+      20%,27%{transform:translate3d(346px,0,0);opacity:1;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+      39%,46%{transform:translate3d(692px,0,0);opacity:1;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+      58%,65%{transform:translate3d(1038px,0,0);opacity:1;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+      77%,90%{transform:translate3d(1384px,0,0);opacity:1}
+      94%{transform:translate3d(1384px,0,0);opacity:0}
+      95%{transform:translate3d(0,0,0);opacity:0}
+      100%{transform:translate3d(0,0,0);opacity:1}
+    }
+    .day-step { --point: 180px; position: absolute; left: calc(var(--point) - 142.5px); width: 285px; height: 188px; min-height: 188px; display: grid; align-content: center; padding: 30px 34px; border: 0; border-radius: 54% 46% 51% 49% / 48% 55% 45% 52%; background: rgba(221,246,252,.82); box-shadow: inset 0 0 0 2px rgba(0,162,185,.15),0 18px 42px rgba(3,91,113,.08); z-index: 2; transition: opacity .7s var(--ease),transform .7s var(--ease),box-shadow .3s ease,filter .3s ease; }
+    .day-step:nth-of-type(odd){top:20px}.day-step:nth-of-type(even){top:340px;border-radius:46% 54% 45% 55% / 55% 48% 52% 45%;background:rgba(255,254,208,.64)}
+    .day-step::after { content: ''; position: absolute; left: calc(50% - 1px); width: 2px; background: rgba(0,162,185,.42); z-index: -1; }
+    .day-step::before { content: ''; position: absolute; left: calc(50% - 7px); width: 14px; height: 14px; border-radius: 50%; background: white; border: 3px solid var(--pln-teal); box-shadow: 0 0 0 6px rgba(0,162,185,.08); }
+    .day-step:nth-of-type(odd)::after{bottom:-91px;height:91px}.day-step:nth-of-type(odd)::before{bottom:-98px}
+    .day-step:nth-of-type(even)::after{top:-41px;height:41px}.day-step:nth-of-type(even)::before{top:-48px}
+    .day-step:hover,.day-step:focus-within { box-shadow: inset 0 0 0 3px rgba(0,162,185,.28),0 24px 54px rgba(3,91,113,.14); filter:saturate(1.08); }
+    .ds1{--point:180px}.ds2{--point:526px}.ds3{--point:872px}.ds4{--point:1218px}.ds5{--point:1564px}
+    .day-step h3{font:400 27px/1 var(--font-display);color:var(--pln-deep)}.day-step p{margin-top:14px;font-size:18px;line-height:1.38;color:var(--muted)}
+    .time-label{--point:180px;position:absolute;left:var(--point);top:334px;transform:translateX(-50%);padding:6px 10px;border:1px solid rgba(3,91,113,.12);border-radius:999px;background:rgba(248,252,253,.94);box-shadow:0 6px 16px rgba(3,91,113,.05);font:600 12px/1 var(--font-mono);letter-spacing:.04em;color:var(--pln-deep);z-index:4}.t1{--point:180px}.t2{--point:526px;top:238px}.t3{--point:872px}.t4{--point:1218px;top:238px}.t5{--point:1564px}
+
+    /* ===========================================
+       SLIDE 05 — MANAGEMENT RADAR
+       =========================================== */
+    .agenda-map { position: relative; width: 1580px; height: 665px; margin: 10px auto 0; }
+    .agenda-core { position: absolute; left: 620px; top: 215px; width: 340px; height: 220px; border-radius: 50%; background: var(--pln-deep); color: white; display: grid; place-items: center; text-align: center; font: 400 40px/1.1 var(--font-display); box-shadow: 0 24px 60px rgba(3,91,113,.2); }
+    .agenda-orbit { position:absolute;left:310px;top:32px;width:960px;height:600px;border:2px dashed rgba(0,162,185,.3);border-radius:50%;animation:spin 45s linear infinite; }
+    .agenda-item { position: absolute; width: 305px; min-height: 142px; padding: 24px 26px; border: 1px solid var(--line); background: rgba(255,255,255,.9); }
+    .agenda-item h3 { font: 400 25px/1 var(--font-display); color: var(--pln-deep); }
+    .agenda-item p { margin-top: 10px; font-size: 18px; line-height: 1.3; color: var(--muted); }
+    .ai1{left:8px;top:73px}.ai2{right:8px;top:73px}.ai3{right:8px;bottom:48px}.ai4{left:8px;bottom:48px}.ai5{left:638px;bottom:0}
+
+    /* ===========================================
+       SLIDE 06 — ECONOMIC VALUE OF TIME
+       =========================================== */
+    .value-layout { display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;margin-top:48px;align-items:center; }
+    .value-number { border-left: 12px solid var(--pln-yellow); padding: 40px 0 40px 40px; }
+    .value-number .rp { font:400 92px/.95 var(--font-display);color:var(--pln-deep); }
+    .value-number .caption { margin-top:22px;font-size:25px;line-height:1.4;color:var(--muted);max-width:550px; }
+    .value-bar-panel { padding: 48px; background: white; border:1px solid var(--line); }
+    .bar-labels {display:flex;justify-content:space-between;font:600 16px/1 var(--font-mono);color:var(--pln-deep);text-transform:uppercase;letter-spacing:.08em}
+    .workbar{height:118px;margin-top:35px;display:flex;overflow:hidden;border-radius:4px;background:#e7f1f4;box-shadow:inset 0 0 0 1px rgba(3,91,113,.1)}
+    .focus-work{width:70%;background:linear-gradient(90deg,#d7e7ec,#bfdde5);display:grid;place-items:center;font-weight:700;color:var(--pln-deep)}
+    .admin-work{width:30%;position:relative;background:repeating-linear-gradient(135deg,var(--soft-yellow) 0 18px,#fff 18px 36px);display:flex;align-items:center;padding-left:14px;font-size:15px;font-weight:700;color:#737500}
+    .recovered{position:absolute;right:0;top:0;bottom:0;width:50%;background:rgba(0,162,185,.94);color:white;display:grid;place-items:center;text-align:center;padding:0 8px;font:600 15px/1.15 var(--font-mono);animation:pulse 2.8s ease-in-out infinite}
+    .formula-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}.formula{padding:20px;border-top:4px solid var(--pln-cyan);background:var(--paper)}.formula strong{display:block;font:400 34px/1 var(--font-display);color:var(--pln-deep)}.formula span{display:block;margin-top:9px;font-size:17px;color:var(--muted)}
+    .caution{margin-top:24px;padding:16px 20px;border-left:5px solid var(--pln-red);background:var(--soft-red);font-size:17px;color:#8a3434}
+
+    /* ===========================================
+       SLIDE 07 — CAPACITY STREAMS
+       =========================================== */
+    .stream-map{position:relative;height:625px;margin-top:18px}.stream-source{position:absolute;left:40px;top:222px;width:330px;height:170px;border-radius:90px;background:var(--pln-deep);color:white;display:grid;place-items:center;text-align:center;font:400 27px/1.15 var(--font-display);box-shadow:0 24px 60px rgba(3,91,113,.18)}
+    .stream-trunk{position:absolute;left:368px;top:299px;width:260px;height:16px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal))}.stream-trunk:after{content:'';position:absolute;right:-18px;top:-10px;border-left:22px solid var(--pln-teal);border-top:18px solid transparent;border-bottom:18px solid transparent}
+    .stream-branches{position:absolute;left:620px;top:48px;width:710px;height:530px;border-left:6px solid var(--pln-teal)}
+    .branch{position:absolute;left:0;width:705px;height:4px;background:linear-gradient(90deg,var(--pln-teal),var(--pln-cyan))}.branch:after{content:'';position:absolute;right:-14px;top:-7px;border-left:16px solid var(--pln-cyan);border-top:9px solid transparent;border-bottom:9px solid transparent}.b1{top:48px}.b2{top:153px}.b3{top:258px}.b4{top:363px}.b5{top:468px}
+    .outcome{position:absolute;right:0;width:410px;min-height:88px;padding:17px 23px;background:white;border:1px solid var(--line);border-left:7px solid var(--pln-cyan);font-size:20px;font-weight:700;color:var(--pln-deep);box-shadow:0 12px 32px rgba(3,91,113,.07)}.outcome small{display:block;margin-top:6px;font-size:15px;font-weight:400;color:var(--muted)}.oc1{top:48px}.oc2{top:153px}.oc3{top:258px}.oc4{top:363px}.oc5{top:468px}
+
+    /* ===========================================
+       SLIDE 08 — ASSISTANT VS AGENT TOGGLE
+       =========================================== */
+    .compare-controls{display:flex;gap:12px;margin-top:28px}.compare-stage{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px;height:600px}.compare-scene{position:relative;padding:38px;border:1px solid var(--line);border-top:8px solid var(--pln-cyan);background:white;overflow:hidden;transition:.3s ease;box-shadow:0 18px 44px rgba(3,91,113,.08)}.compare-scene.agent{border-top-color:var(--pln-yellow);background:linear-gradient(135deg,#fff,#fffedc)}.compare-scene.dim{opacity:.38;filter:saturate(.45)}.compare-scene h3{font:400 42px/1 var(--font-display);color:var(--pln-deep)}.compare-scene .desc{margin-top:14px;font-size:20px;color:var(--muted)}.task-list{display:grid;gap:13px;margin-top:30px}.task{display:flex;align-items:center;gap:15px;padding:15px 18px;border:1px solid var(--line);background:var(--paper);font-size:18px;color:var(--ink)}.task::before{content:'';width:12px;height:12px;border-radius:50%;background:var(--pln-cyan);box-shadow:0 0 0 7px rgba(0,175,240,.12)}.agent .task::before{background:#d7d900}
+    .human-node{position:absolute;right:50px;bottom:62px;width:108px;height:108px;border-radius:50%;display:grid;place-items:center;background:white;color:var(--pln-deep);font:600 17px/1 var(--font-mono)}.tool-orbit{position:absolute;right:26px;bottom:34px;width:160px;height:160px;border:1px dashed #7DE7F6;border-radius:50%;animation:spin 9s linear infinite}.tool-orbit::before,.tool-orbit::after{content:'';position:absolute;width:25px;height:25px;border-radius:50%;background:var(--pln-yellow);top:9px;left:28px}.tool-orbit::after{top:auto;left:auto;right:8px;bottom:32px;background:var(--pln-red)}
+    .compare-callout{position:absolute;left:50%;bottom:46px;transform:translateX(-50%);padding:17px 30px;background:var(--pln-deep);color:white;font:600 18px/1 var(--font-mono);z-index:2}
+
+    /* ===========================================
+       SLIDE 09 — CODING AGENT PIPELINE
+       =========================================== */
+    .code-pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:22px;margin-top:64px;position:relative}.code-pipeline::before{content:'';position:absolute;left:120px;right:120px;top:91px;height:4px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal),var(--pln-deep));z-index:0}.code-step{position:relative;z-index:1;padding:30px 26px;min-height:260px;background:white;border:1px solid var(--line);text-align:center}.code-icon{width:92px;height:92px;margin:0 auto 28px;border-radius:50%;display:grid;place-items:center;background:var(--soft-cyan);border:3px solid var(--pln-teal);font:600 24px/1 var(--font-mono);color:var(--pln-deep)}.code-step h3{font:400 25px/1 var(--font-display);color:var(--pln-deep)}.code-step p{margin-top:13px;font-size:17px;line-height:1.35;color:var(--muted)}
+    .terminal{margin-top:30px;height:160px;padding:25px 30px;background:var(--pln-deep);color:#bdf7ff;font:500 18px/1.6 var(--font-mono);position:relative;overflow:hidden}.terminal .cursor{display:inline-block;width:11px;height:22px;background:var(--pln-yellow);vertical-align:middle;animation:blink 1s steps(1) infinite}.terminal::after{content:'';position:absolute;left:0;right:0;height:38px;background:linear-gradient(transparent,rgba(0,175,240,.18),transparent);animation:scan 3.5s linear infinite}
+
+    /* ===========================================
+       SLIDE 10 — HUMAN + AI INTERSECTION
+       =========================================== */
+    .venn-wrap{position:relative;height:650px;margin-top:18px}.venn{position:absolute;top:40px;width:640px;height:640px;border-radius:50%;padding:115px 110px}.venn h3{font:400 43px/1 var(--font-display)}.venn ul{margin-top:25px;display:grid;gap:13px;list-style:none;font-size:21px;line-height:1.25}.venn li::before{content:'—';margin-right:10px;color:var(--pln-teal)}.venn-ai{left:180px;background:rgba(0,175,240,.17);border:3px solid var(--pln-cyan);color:var(--pln-deep)}.venn-human{right:180px;background:rgba(255,255,0,.2);border:3px solid #D9DD00;color:var(--pln-deep);padding-left:220px}.venn-intersection{position:absolute;left:790px;top:225px;width:340px;height:250px;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--pln-deep);color:white;font:400 30px/1.2 var(--font-display);box-shadow:0 20px 50px rgba(3,91,113,.22);animation:pulse 2.8s ease-in-out infinite}.role-caption{position:absolute;left:620px;bottom:12px;width:680px;text-align:center;font-size:23px;color:var(--muted)}
+
+    /* ===========================================
+       SLIDE 11 — HALLUCINATION REVEAL
+       =========================================== */
+    .hallucination-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;margin-top:48px}.report-sheet{position:relative;height:570px;padding:54px;background:white;color:var(--ink);box-shadow:0 30px 80px rgba(3,30,40,.25);transform:rotate(-1deg);overflow:hidden}.report-sheet h3{font:400 34px/1 var(--font-display);color:var(--pln-deep)}.report-lines{margin-top:34px;display:grid;gap:18px}.report-line{height:12px;background:#dce8eb;border-radius:2px}.report-line:nth-child(2){width:78%}.report-line:nth-child(4){width:88%}.false-claim{margin-top:40px;padding:22px 28px;border-left:8px solid var(--pln-red);background:var(--soft-red);font-size:28px;line-height:1.35;color:#6e2c2c}.false-claim strong{font:400 56px/1 var(--font-display);color:var(--pln-red)}.stamp{position:absolute;right:38px;bottom:42px;border:6px solid var(--pln-red);color:var(--pln-red);padding:14px 20px;font:600 25px/1 var(--font-mono);letter-spacing:.12em;transform:rotate(-8deg);opacity:0;transition:.35s var(--ease)}.report-sheet.verified .stamp{opacity:1;transform:rotate(-8deg) scale(1)}
+    .risk-copy{padding:34px;background:linear-gradient(135deg,#fff,#eaf9fc);border:1px solid var(--line);border-top:8px solid var(--pln-red)}.risk-copy h3{font:400 48px/1.04 var(--font-display);color:var(--pln-deep)}.risk-copy p{margin-top:22px;font-size:22px;line-height:1.42;color:var(--muted)}.risk-copy ul{margin-top:24px;display:grid;gap:12px;list-style:none}.risk-copy li{padding:14px 18px;border:1px solid var(--line);background:white;font-size:18px;color:var(--ink)}.verify-btn{margin-top:26px;background:var(--pln-yellow);color:var(--pln-deep);border:1px solid #d5d700;border-radius:0;padding:15px 21px;font:600 16px/1 var(--font-mono);cursor:pointer}
+
+    /* ===========================================
+       SLIDE 12 — VERIFICATION CHECKPOINTS
+       =========================================== */
+    .verify-path{position:relative;height:560px;margin-top:70px}.verify-line{position:absolute;left:130px;right:130px;top:225px;height:8px;background:#cfe5ea}.verify-progress{height:100%;width:0;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal));transition:width 1.8s var(--ease)}.slide.visible .verify-progress{width:100%}.checkpoint{position:absolute;top:135px;width:280px;height:190px;padding:30px;background:white;border:1px solid var(--line);text-align:center}.checkpoint::after{content:'';position:absolute;left:50%;bottom:-27px;transform:translateX(-50%);width:35px;height:35px;border-radius:50%;background:var(--pln-teal);border:7px solid var(--paper);box-shadow:0 0 0 2px var(--pln-teal)}.cp1{left:30px}.cp2{left:440px}.cp3{left:850px}.cp4{left:1260px}.checkpoint h3{font:400 30px/1 var(--font-display);color:var(--pln-deep)}.checkpoint p{margin-top:15px;font-size:18px;line-height:1.35;color:var(--muted)}.verified-seal{position:absolute;right:20px;bottom:8px;padding:18px 26px;background:var(--pln-deep);color:white;font:600 18px/1 var(--font-mono);letter-spacing:.1em;transform:rotate(-3deg)}
+
+    /* ===========================================
+       SLIDE 13 — INTERACTIVE RISK MATRIX
+       =========================================== */
+    .risk-layout{display:grid;grid-template-columns:1fr 420px;gap:44px;margin-top:38px}.risk-matrix{position:relative;height:610px;background:linear-gradient(135deg,#E7F8FD 0 43%,#FFF7CF 43% 61%,#FFE3E3 61% 100%);border:1px solid var(--line)}.axis-y{position:absolute;left:-42px;top:50%;transform:rotate(-90deg) translateX(-50%);transform-origin:left;font:600 15px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-deep);text-transform:uppercase}.axis-x{position:absolute;left:50%;bottom:-34px;transform:translateX(-50%);font:600 15px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-deep);text-transform:uppercase}.risk-dot{position:absolute;width:34px;height:34px;border-radius:50%;border:5px solid white;box-shadow:0 10px 24px rgba(3,91,113,.18);cursor:pointer;transition:.25s ease}.risk-dot:hover,.risk-dot:focus{transform:scale(1.4);outline:none}.rd1{left:17%;bottom:17%;background:var(--pln-cyan)}.rd2{left:43%;bottom:42%;background:var(--pln-teal)}.rd3{left:67%;bottom:62%;background:#E1CF00}.rd4{right:12%;top:12%;background:var(--pln-red);animation:pulse 2.4s ease-in-out infinite}.matrix-label{position:absolute;font:600 17px/1 var(--font-mono);color:var(--pln-deep);background:rgba(255,255,255,.82);padding:8px 12px}.ml1{left:20%;bottom:10%}.ml2{left:46%;bottom:35%}.ml3{left:70%;bottom:55%}.ml4{right:6%;top:24%}
+    .risk-legend{display:grid;grid-template-rows:repeat(4,1fr);gap:14px}.risk-item{padding:24px;border:1px solid var(--line);background:white}.risk-item strong{font:400 25px/1 var(--font-display);color:var(--pln-deep)}.risk-item p{margin-top:10px;font-size:17px;line-height:1.3;color:var(--muted)}
+
+    /* ===========================================
+       SLIDE 14 — POLICY GATES
+       =========================================== */
+    .gate-path{position:relative;height:600px;margin-top:28px}.gate-line{position:absolute;left:82px;right:82px;top:310px;height:10px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal),var(--pln-deep))}.policy-token{position:absolute;left:66px;top:281px;width:68px;height:68px;border-radius:50%;background:var(--pln-yellow);border:5px solid white;box-shadow:0 13px 26px rgba(3,91,113,.2)}.slide.visible .policy-token{animation:policyMove 10s ease-in-out infinite}@keyframes policyMove{0%,7%{left:66px}20%,27%{left:390px}40%,47%{left:715px}60%,67%{left:1040px}80%,100%{left:1370px}}
+    .gate{position:absolute;top:100px;width:250px;height:410px;padding:30px 22px;background:white;border:1px solid var(--line);border-top:7px solid var(--pln-cyan);text-align:center;overflow:hidden;box-shadow:0 14px 34px rgba(3,91,113,.07)}.gate::before{content:'';position:absolute;left:50%;top:140px;width:92px;height:92px;border:9px solid var(--pln-teal);border-radius:50%;transform:translateX(-50%);background:var(--paper);box-shadow:inset 0 0 0 18px white}.gate h3{font:400 27px/1 var(--font-display);color:var(--pln-deep)}.gate p{position:absolute;left:20px;right:20px;bottom:28px;margin:0;padding-top:18px;border-top:1px solid var(--line);font-size:16px;line-height:1.32;color:var(--muted)}.g1{left:20px}.g2{left:345px}.g3{left:670px}.g4{left:995px}.g5{left:1320px;border-top-color:var(--pln-red)}.g5::before{border-color:var(--pln-red)}
+
+    /* ===========================================
+       SLIDE 15 — REGULATORY RINGS
+       =========================================== */
+    .reg-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:55px;margin-top:35px}.reg-rings{position:relative;height:620px}.rr{position:absolute;border-radius:50%;display:flex;align-items:flex-start;justify-content:center;padding-top:35px;font:600 17px/1 var(--font-mono);letter-spacing:.11em;text-transform:uppercase}.rr1{inset:10px;border:4px solid rgba(0,175,240,.4);color:var(--pln-cyan)}.rr2{inset:95px;border:4px solid rgba(0,162,185,.55);color:var(--pln-teal)}.rr3{inset:180px;border:4px solid var(--pln-deep);color:var(--pln-deep)}.work-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:235px;height:235px;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--pln-yellow);color:var(--pln-deep);font:400 26px/1.15 var(--font-display);box-shadow:0 20px 50px rgba(3,91,113,.18)}
+    .reg-list{display:grid;gap:20px;align-content:center}.reg-card{padding:27px 31px;background:white;border-left:8px solid var(--pln-cyan)}.reg-card:nth-child(2){border-left-color:var(--pln-teal)}.reg-card:nth-child(3){border-left-color:var(--pln-deep)}.reg-card h3{font:400 27px/1 var(--font-display);color:var(--pln-deep)}.reg-card p{margin-top:12px;font-size:18px;line-height:1.38;color:var(--muted)}
+
+    /* ===========================================
+       SLIDE 16 — DECISIONS TO OUTCOMES
+       =========================================== */
+    .decision-bridge{display:grid;grid-template-columns:1fr 220px 1fr;gap:24px;margin-top:48px;align-items:stretch;height:590px}.decision-col{padding:38px 42px;background:white;border:1px solid var(--line)}.decision-col h3{font:400 34px/1 var(--font-display);color:var(--pln-deep)}.decision-col ul{margin-top:30px;display:grid;gap:18px;list-style:none}.decision-col li{display:flex;align-items:center;gap:15px;font-size:20px;color:var(--muted)}.decision-col li::before{content:'';width:13px;height:13px;border-radius:50%;background:var(--pln-teal);box-shadow:0 0 0 7px rgba(0,162,185,.1)}
+    .bridge{position:relative;overflow:hidden}.bridge::before{content:'';position:absolute;left:0;right:0;top:50%;height:8px;background:var(--pln-deep)}.bridge::after{content:'→';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:var(--pln-yellow);color:var(--pln-deep);font:400 48px/1 var(--font-display);box-shadow:0 0 0 15px rgba(255,255,0,.2)}.bridge-token{position:absolute;top:calc(50% - 11px);left:0;width:22px;height:22px;border-radius:50%;background:var(--pln-cyan);animation:bridgeMove 3.5s ease-in-out infinite}@keyframes bridgeMove{50%,100%{left:calc(100% - 22px)}}
+    .decision-foot{position:absolute;left:88px;bottom:73px;font:600 22px/1.3 var(--font-mono);color:var(--pln-deep)}
+
+    /* ===========================================
+       SLIDE 17 — DEMO + CLOSING
+       =========================================== */
+    .closing-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:38px}.demo-panel{padding:31px 34px;min-height:310px;border:1px solid var(--line);border-top:8px solid var(--pln-cyan);background:white;box-shadow:0 16px 38px rgba(3,91,113,.08)}.demo-panel:nth-child(2){border-top-color:var(--pln-yellow)}.demo-panel h3{font:400 32px/1 var(--font-display);color:var(--pln-deep)}.io{display:grid;grid-template-columns:1fr 45px 1.2fr;gap:14px;align-items:center;margin-top:26px}.io-box{padding:18px;border:1px solid var(--line);background:var(--paper);font-size:17px;line-height:1.35;color:var(--ink)}.io-arrow{text-align:center;color:var(--pln-teal);font-size:32px}.checkline{margin-top:18px;font:500 14px/1.4 var(--font-mono);color:var(--pln-teal)}
+    .closing-statement{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}.closing-statement div{padding:24px 28px;background:white;color:var(--pln-deep);font-size:21px;line-height:1.35;border-top:7px solid var(--pln-cyan)}.closing-statement div:nth-child(2){border-top-color:var(--pln-red)}.closing-statement div:nth-child(3){border-top-color:var(--pln-yellow)}
+    .closing-logos{position:absolute;left:88px;bottom:50px;display:flex;gap:30px;align-items:center;background:white;padding:12px 18px}.closing-logos img:first-child{width:178px}.closing-logos img:last-child{width:190px}
+
+    /* ===========================================
+       PRESENTATION CONTROLS & OVERLAYS
+       =========================================== */
+    .controls { display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:999px;background:rgba(3,91,113,.92);box-shadow:0 14px 40px rgba(3,40,50,.24);opacity:0;transition:.25s ease; }
+    .controls:hover,.controls:focus-within{opacity:1}.controls button{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.13);color:white;cursor:pointer;font-size:18px}.controls button:hover{background:var(--pln-teal)}.counter{padding:0 12px;color:white;font:500 13px/1 var(--font-mono)}
+    .progress-track{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(3,91,113,.12);z-index:1200}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal),var(--pln-yellow),var(--pln-red));transition:width .45s var(--ease)}
+    .edit-hotzone{position:fixed;top:0;left:0;width:80px;height:80px;z-index:10000;cursor:pointer}.edit-toggle{position:fixed;top:18px;left:18px;width:46px;height:46px;border:0;border-radius:50%;background:var(--pln-deep);color:white;opacity:0;pointer-events:none;transition:.25s ease;z-index:10001;cursor:pointer}.edit-toggle.show,.edit-toggle.active{opacity:1;pointer-events:auto}.edit-toggle.active{background:var(--pln-red)}
+    .toast{position:fixed;top:22px;left:50%;transform:translate(-50%,-20px);padding:13px 20px;background:var(--pln-deep);color:white;border-radius:4px;font:500 14px/1 var(--font-mono);opacity:0;pointer-events:none;transition:.25s ease;z-index:11000}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .help{position:fixed;inset:0;display:grid;place-items:center;background:rgba(3,38,48,.7);backdrop-filter:blur(9px);z-index:9000;opacity:0;pointer-events:none;transition:.25s ease}.help.show{opacity:1;pointer-events:auto}.help-card{width:min(660px,88vw);padding:38px 42px;background:white;color:var(--pln-deep);box-shadow:0 30px 90px rgba(0,0,0,.25)}.help-card h2{font:400 34px/1 var(--font-display)}.help-card dl{margin-top:24px;display:grid;grid-template-columns:140px 1fr;gap:13px;font-size:17px}.help-card dt{font:600 14px/1.5 var(--font-mono);color:var(--pln-teal)}.help-card button{margin-top:28px;border:0;background:var(--pln-deep);color:white;padding:12px 18px;cursor:pointer}
+
+    /* ===========================================
+       REVISION 3 — ORGANIC VISUAL SYSTEM
+       =========================================== */
+    .title-right::before{content:'';position:absolute;inset:0;background:conic-gradient(from 45deg at 50% 50%,rgba(0,175,240,.08),transparent 20%,rgba(255,255,0,.1) 34%,transparent 52%,rgba(0,162,185,.11) 72%,transparent);background-size:145% 145%;animation:ambientSweep 12s ease-in-out infinite alternate}
+    @keyframes ambientSweep{to{background-position:100% 100%}}
+    .orbit-system{left:56px;top:165px;width:760px;height:760px;transition:transform .25s ease}
+    .orbit{inset:70px;animation:spin 25s linear infinite;border-width:2px}
+    .orbit.o1{inset:70px;animation-duration:20s}
+    .orbit.o2{inset:0;animation-duration:30s}
+    .orbit.o3{inset:145px;animation-duration:15s;animation-direction:reverse}
+    .orbit.o4{inset:220px;border-style:dashed;border-color:rgba(3,91,113,.32);animation-duration:11s}
+    .orbit.o1::before{background:var(--pln-cyan)}.orbit.o1::after{background:var(--pln-teal)}
+    .orbit.o2::before{background:var(--pln-yellow)}.orbit.o2::after{background:var(--pln-cyan)}
+    .orbit.o3::before{background:var(--pln-red)}.orbit.o3::after{background:var(--pln-teal)}
+    .orbit.o4::before{background:var(--pln-cyan)}.orbit.o4::after{background:var(--pln-yellow)}
+    .orbit.o4::before,.orbit.o4::after{width:16px;height:16px;box-shadow:0 0 0 10px rgba(0,175,240,.11)}
+    .orbit-core{left:265px;top:265px;width:230px;height:230px;border:0;cursor:pointer;padding:28px;font:600 21px/1.25 var(--font-mono);transition:transform .3s var(--ease),background .3s ease,box-shadow .3s ease}
+    .orbit-core>span{display:block;font-size:16px;line-height:1.3}
+    .orbit-core:hover,.orbit-core:focus-visible{transform:scale(1.07);background:var(--pln-teal);box-shadow:0 28px 90px rgba(0,162,185,.35);outline:4px solid rgba(255,255,255,.9);outline-offset:8px}
+    .orbit-core small{display:block;margin-top:13px;font:500 10px/1.25 var(--font-mono);letter-spacing:.12em;color:#aeeffa}
+    .ol1{left:0;top:345px}.ol2{right:0;top:345px}.ol3{left:330px;top:0}.ol4{left:329px;bottom:0}
+    .title-interaction-hint{position:absolute;right:45px;bottom:52px;font:600 12px/1 var(--font-mono);letter-spacing:.12em;color:rgba(3,91,113,.62)}
+
+    /* Slide 02 — flowing capability trajectory */
+    .evolution-field{position:relative;width:1744px;height:640px;margin:18px auto 0}
+    .evolution-path{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+    .evolution-path path{fill:none;stroke-linecap:round}
+    .evolution-shadow{stroke:rgba(3,91,113,.12);stroke-width:20}
+    .evolution-dash{stroke:url(#capabilityGradient);stroke:var(--pln-teal);stroke-width:5;stroke-dasharray:18 14;animation:march 2.4s linear infinite}
+    .evo-step{position:absolute;width:250px;color:var(--pln-deep);z-index:2}
+    .evo-node{width:102px;height:102px;border-radius:50%;border:4px solid white;background:var(--pln-deep);color:white;box-shadow:0 16px 42px rgba(3,91,113,.2);font:600 20px/1 var(--font-mono);cursor:pointer;transition:.28s var(--ease)}
+    .evo-node:hover,.evo-node:focus-visible{transform:scale(1.15);background:var(--pln-teal);outline:0;box-shadow:0 0 0 16px rgba(0,162,185,.12)}
+    .evo-step h3{margin-top:16px;font:400 27px/1 var(--font-display)}
+    .evo-step p{margin-top:9px;font-size:18px;color:var(--muted)}
+    .es1{left:24px;top:438px}.es2{left:399px;top:338px}.es3{left:799px;top:256px}.es4{left:1209px;top:158px}.es5{right:0;top:46px;text-align:right}.es5 .evo-node{background:var(--pln-teal);box-shadow:0 0 0 14px rgba(0,162,185,.12),0 16px 42px rgba(3,91,113,.18)}
+    .evolution-axis{position:absolute;left:170px;right:170px;bottom:9px;display:flex;justify-content:space-between;border-top:1px solid rgba(3,91,113,.2);padding-top:13px;font:600 13px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}
+
+    /* Slide 03 — separate evidence, explicit readiness gap */
+    .evidence-board{display:grid;grid-template-columns:760px 1fr;gap:74px;height:650px;margin-top:24px;align-items:center}
+    .survey-signals{display:grid;gap:24px}
+    .survey-signal{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:center;padding-bottom:18px;border-bottom:1px solid rgba(3,91,113,.14)}
+    .survey-signal:last-child{border-bottom:0}
+    .signal-ring{--p:50;position:relative;width:138px;height:138px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--pln-teal) calc(var(--p) * 1%),rgba(3,91,113,.09) 0);font:400 38px/1 var(--font-display);color:var(--pln-deep)}
+    .signal-ring::before{content:'';position:absolute;inset:13px;border-radius:50%;background:#f8fcfd}
+    .signal-ring span{position:relative;z-index:1}
+    .survey-signal h3{font:600 14px/1 var(--font-mono);letter-spacing:.14em;color:var(--pln-teal)}
+    .survey-signal p{margin-top:10px;font-size:21px;line-height:1.35;color:var(--muted)}
+    .readiness-gap{position:relative;padding:24px 0 0 28px;border-left:2px solid rgba(3,91,113,.13)}
+    .gap-eyebrow{font:600 14px/1 var(--font-mono);letter-spacing:.15em;color:var(--pln-red)}
+    .readiness-gap h3{margin-top:16px;font:400 42px/1.04 var(--font-display);color:var(--pln-deep)}
+    .readiness-gap h3 span{color:var(--muted)}
+    .comparison-bar{margin-top:38px}.comparison-bar+.comparison-bar{margin-top:27px}
+    .comparison-label{display:flex;justify-content:space-between;align-items:flex-end;font-size:19px;color:var(--ink)}.comparison-label strong{font:400 42px/.9 var(--font-display);color:var(--pln-deep)}
+    .bar-track{height:22px;margin-top:12px;border-radius:999px;background:rgba(3,91,113,.1);overflow:hidden}.bar-track i{display:block;width:var(--w);height:100%;border-radius:999px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal));animation:countbar 1.2s var(--ease)}.mature .bar-track i{background:var(--pln-red)}.mature .comparison-label strong{color:var(--pln-red)}
+    .gap-number{display:flex;align-items:baseline;gap:20px;margin-top:38px;color:var(--pln-deep)}.gap-number strong{font:400 62px/.9 var(--font-display)}.gap-number span{font-size:21px;color:var(--muted)}
+    .chart-note{margin-top:24px;padding-top:18px;border-top:1px solid rgba(3,91,113,.13);font:500 14px/1.4 var(--font-mono);color:var(--muted)}
+
+    /* Slide 06 — mathematically correct capacity allocation */
+    .capacity-economics{display:grid;grid-template-columns:560px 1fr;gap:70px;height:650px;margin-top:30px;align-items:center}
+    .capacity-value{padding-left:42px;border-left:12px solid var(--pln-yellow)}
+    .capacity-rp{margin-top:24px;font:400 98px/.82 var(--font-display);letter-spacing:-.06em;color:var(--pln-deep)}.capacity-rp span{display:block;margin-top:22px;font:600 18px/1 var(--font-mono);letter-spacing:.09em;color:var(--pln-teal)}
+    .capacity-equation{margin-top:34px;font:600 22px/1.2 var(--font-mono);color:var(--pln-deep)}.capacity-equation b{padding:0 7px;color:var(--pln-teal)}
+    .capacity-value p{margin-top:22px;max-width:460px;font-size:22px;line-height:1.4;color:var(--muted)}
+    .time-allocation{position:relative;padding:38px 42px 34px;background:rgba(255,255,255,.72);border-top:2px solid var(--pln-teal);box-shadow:0 24px 70px rgba(3,91,113,.08)}
+    .allocation-head{display:flex;justify-content:space-between;font:600 14px/1 var(--font-mono);letter-spacing:.1em;color:var(--muted)}
+    .admin-bracket{position:relative;width:30%;height:55px;margin:32px 0 0 70%;border:2px solid var(--pln-red);border-bottom:0;text-align:center;padding-top:12px;font:600 12px/1.15 var(--font-mono);color:#a32020}.admin-bracket::before,.admin-bracket::after{content:'';position:absolute;bottom:-10px;width:2px;height:10px;background:var(--pln-red)}.admin-bracket::before{left:-2px}.admin-bracket::after{right:-2px}
+    .allocation-bar{height:155px;display:grid;grid-template-columns:70fr 15fr 15fr;overflow:hidden;border-radius:78px;box-shadow:inset 0 0 0 1px rgba(3,91,113,.1)}
+    .segment{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px}.segment strong{font:400 43px/.9 var(--font-display)}.segment span{margin-top:10px;font-size:16px;line-height:1.2}.segment.core{background:linear-gradient(90deg,#e7f3f6,#d7e9ed);color:var(--pln-deep)}.segment.admin-left{background:repeating-linear-gradient(135deg,#fffed8 0 15px,#fff 15px 30px);color:#7b7600}.segment.capacity-back{background:var(--pln-teal);color:white;animation:capacityGlow 2.8s ease-in-out infinite}
+    @keyframes capacityGlow{50%{background:#00b6cb;box-shadow:inset 0 0 0 6px rgba(255,255,255,.35)}}
+    .allocation-reading{display:grid;grid-template-columns:1fr 70px 1fr;align-items:center;margin-top:28px;text-align:center}.allocation-reading>div:not(.flow-arrow){display:flex;align-items:center;justify-content:center;gap:14px}.allocation-reading strong{font:400 39px/1 var(--font-display);color:var(--pln-deep)}.allocation-reading span{max-width:180px;text-align:left;font-size:16px;line-height:1.25;color:var(--muted)}.flow-arrow{font-size:37px;color:var(--pln-teal)}
+    .capacity-use{margin-top:26px;padding-top:20px;border-top:1px solid rgba(3,91,113,.14);font-size:18px;line-height:1.4;color:var(--muted)}
+
+    /* Slide 07 — animated allocation river */
+    .capacity-river{position:relative;height:650px;margin-top:14px}
+    .river-svg{position:absolute;inset:0;width:100%;height:620px;overflow:visible}.river-svg path{fill:none;stroke:url(#riverGradient);stroke-width:6;stroke-linecap:round;opacity:.62}.river-svg path:nth-of-type(3){stroke-width:11;opacity:.9}.river-particles circle{filter:drop-shadow(0 0 9px rgba(0,175,240,.8))}
+    .river-source{position:absolute;left:40px;top:215px;width:270px;height:190px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;font:600 19px/1.2 var(--font-mono);box-shadow:0 24px 70px rgba(3,91,113,.22)}.river-source span{display:block;margin-bottom:11px;font:400 56px/.9 var(--font-display);color:#9ceffd}
+    .river-outcome{position:absolute;left:1040px;width:610px;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:center;padding:9px 0;border-bottom:1px solid rgba(3,91,113,.16)}.river-outcome>span{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--soft-cyan);color:var(--pln-deep);font:600 14px/1 var(--font-mono)}.river-outcome strong{font:400 25px/1 var(--font-display);color:var(--pln-deep)}.river-outcome small{display:block;margin-top:6px;font-size:16px;color:var(--muted)}
+    .ro1{top:36px}.ro2{top:151px}.ro3{top:263px}.ro4{top:375px}.ro5{top:489px}
+    .river-caption{position:absolute;left:385px;bottom:4px;font-size:18px;color:var(--muted)}.river-caption b{color:var(--pln-deep)}
+
+    /* Slide 08 — authority flows with explicit meaning */
+    .authority-map{display:grid;gap:22px;margin-top:30px}
+    .authority-lane{position:relative;display:grid;grid-template-columns:360px 1fr;gap:36px;align-items:center;min-height:245px;padding:30px 38px;border-radius:135px;background:linear-gradient(90deg,rgba(0,175,240,.12),rgba(255,255,255,.65));overflow:hidden}.agent-flow{background:linear-gradient(90deg,rgba(0,162,185,.13),rgba(255,255,255,.68));box-shadow:inset 0 0 0 2px rgba(0,162,185,.1)}
+    .lane-name{padding-left:18px}.lane-name>span{font:600 13px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-teal)}.lane-name h3{margin-top:11px;font:400 36px/1 var(--font-display);color:var(--pln-deep)}.lane-name p{margin-top:13px;font-size:18px;line-height:1.35;color:var(--muted)}
+    .lane-flow{display:flex;align-items:center;min-width:0}.flow-node{flex:0 0 134px;height:134px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:white;border:3px solid var(--pln-cyan);color:var(--pln-deep);font:600 16px/1 var(--font-mono);box-shadow:0 14px 36px rgba(3,91,113,.11)}.flow-node small{display:block;margin-top:10px;padding:0 12px;font:500 12px/1.15 var(--font-body);color:var(--muted)}.flow-node.ai{background:var(--pln-deep);border-color:var(--pln-deep);color:white}.flow-node.ai small{color:#b7e8ef}.flow-node.approval{border-color:var(--pln-teal);box-shadow:0 0 0 10px rgba(0,162,185,.1)}
+    .flow-link{position:relative;flex:1;height:4px;min-width:38px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal));overflow:visible}.flow-link::after{content:'›';position:absolute;right:-3px;top:50%;transform:translateY(-55%);font:400 37px/1 var(--font-display);color:var(--pln-teal)}.flow-link::before{content:'';position:absolute;top:-5px;left:0;width:14px;height:14px;border-radius:50%;background:var(--pln-cyan);animation:flowTravel 2.6s linear infinite}
+    @keyframes flowTravel{to{left:calc(100% - 14px)}}
+    .lane-control{position:absolute;right:60px;bottom:18px;font:600 11px/1 var(--font-mono);letter-spacing:.1em;color:var(--pln-teal)}
+    .authority-principle{display:flex;gap:22px;align-items:center;margin:24px auto 0;width:max-content;max-width:1400px;font-size:20px;color:var(--muted)}.authority-principle span{font:600 13px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-red)}
+
+    /* Slide 10 — centered augmented-work operating model */
+    .collaboration-system{position:relative;height:650px;margin-top:12px}
+    .collab-links{position:absolute;inset:0;width:100%;height:620px;overflow:visible}.collab-links path{fill:none;stroke:rgba(0,175,240,.42);stroke-width:4;stroke-linecap:round;stroke-dasharray:12 12;vector-effect:non-scaling-stroke;animation:march 3.4s linear infinite}.collab-links .human-link{stroke:rgba(0,162,185,.46)}
+    .role-cluster{position:absolute;top:64px;width:430px;height:480px}.ai-role{left:70px}.human-role{right:70px;text-align:right}
+    .role-heading span{display:block;font:400 55px/.9 var(--font-display);color:var(--pln-deep)}.role-heading small{display:block;margin-top:13px;font:600 12px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}
+    .role-cluster ul{margin-top:33px;display:grid;gap:26px;list-style:none}.role-cluster li{position:relative;font-size:21px;color:var(--ink)}.ai-role li{padding-right:35px;text-align:right}.human-role li{padding-left:35px;text-align:left}.ai-role li::after,.human-role li::before{content:'';position:absolute;top:8px;width:13px;height:13px;border-radius:50%;box-shadow:0 0 0 8px rgba(0,175,240,.1);z-index:2}.ai-role li::after{right:0;background:var(--pln-cyan)}.human-role li::before{left:0;background:var(--pln-teal)}
+    .augmented-core{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:350px;height:350px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;box-shadow:0 25px 80px rgba(3,91,113,.28);z-index:3}.augmented-core strong{font:400 35px/1.08 var(--font-display)}.augmented-core span{margin-top:20px;font-size:17px;line-height:1.35;color:#bfeff5}.core-ring{position:absolute;inset:-26px;border:2px dashed var(--pln-teal);border-radius:50%;animation:spin 15s linear infinite}.core-ring::before,.core-ring::after{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:var(--pln-cyan);top:36px;left:48px;box-shadow:0 0 0 11px rgba(0,175,240,.12)}.core-ring::after{inset:auto 38px 54px auto;background:var(--pln-teal)}
+    .collab-caption{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:1040px;text-align:center;font-size:21px;line-height:1.4;color:var(--muted)}
+
+    /* Slide 14 — policy wheel, no card stack */
+    .policy-wheel{position:relative;height:630px;margin-top:10px}
+    .policy-orbit{position:absolute;inset:0;width:100%;height:610px;overflow:visible}.policy-orbit ellipse{fill:none;stroke:rgba(3,91,113,.14);stroke-width:14}.policy-orbit .policy-trace{stroke:var(--pln-teal);stroke-width:4;stroke-dasharray:32 22;animation:march 2.7s linear infinite}
+    .policy-core{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:470px;height:280px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;padding:42px;background:var(--pln-deep);color:white;box-shadow:0 25px 70px rgba(3,91,113,.22)}.policy-core>span{font:600 13px/1 var(--font-mono);letter-spacing:.15em;color:#9beafa}.policy-core strong{margin-top:17px;font:400 31px/1.12 var(--font-display)}.policy-core p{margin-top:17px;max-width:350px;font-size:16px;line-height:1.35;color:#c8ebf0}
+    .policy-node{position:absolute;width:152px;height:152px;border-radius:50%;border:3px solid var(--pln-teal);display:grid;place-items:center;align-content:center;background:#f8fcfd;color:var(--pln-deep);cursor:pointer;box-shadow:0 16px 42px rgba(3,91,113,.13);transition:.28s var(--ease);z-index:2}.policy-node span{font:600 12px/1 var(--font-mono);color:var(--pln-teal)}.policy-node strong{margin-top:10px;font:600 14px/1.1 var(--font-mono);letter-spacing:.05em}.policy-node:hover,.policy-node:focus-visible,.policy-node.active{transform:scale(1.1);background:var(--pln-teal);color:white;outline:0;box-shadow:0 0 0 14px rgba(0,162,185,.12)}.policy-node:hover span,.policy-node:focus-visible span,.policy-node.active span{color:white}
+    .pn1{left:166px;top:48px}.pn2{left:305px;top:400px}.pn3{left:796px;top:470px}.pn4{right:305px;top:400px}.pn5{right:166px;top:48px}
+    .policy-hint{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--muted)}
+
+    /* Slide 15 — regulation mapped directly to work flow */
+    .regulatory-flow{position:relative;display:grid;grid-template-columns:1fr 130px 1fr 130px 1fr;gap:10px;align-items:start;height:650px;margin-top:20px;padding:20px 22px 0}
+    .reg-stage{position:relative;text-align:center}.reg-number{position:absolute;left:46px;top:0;z-index:2;font:600 13px/1 var(--font-mono);letter-spacing:.14em;color:var(--pln-teal)}
+    .reg-blob{width:380px;height:380px;margin:18px auto 0;border-radius:48% 52% 55% 45% / 43% 42% 58% 57%;display:grid;place-items:center;align-content:center;padding:58px;background:var(--soft-cyan);color:var(--pln-deep);box-shadow:inset 0 0 0 3px rgba(0,162,185,.16);animation:blobShift 7s ease-in-out infinite}.system-stage .reg-blob{background:#e3f7f4;animation-delay:-2s}.use-stage .reg-blob{background:#fffedb;animation-delay:-4s}
+    @keyframes blobShift{50%{border-radius:56% 44% 42% 58% / 53% 57% 43% 47%;transform:translateY(-7px)}}
+    .reg-blob small{font:600 12px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.reg-blob h3{margin-top:14px;font:400 43px/1 var(--font-display)}.reg-blob p{margin-top:20px;font-size:18px;line-height:1.4;color:var(--muted)}.reg-stage>strong{display:inline-block;margin-top:20px;padding-bottom:8px;border-bottom:3px solid var(--pln-teal);font:600 15px/1 var(--font-mono);color:var(--pln-deep)}
+    .reg-arrow{padding-top:190px;text-align:center;color:var(--pln-teal)}.reg-arrow span{display:block;font:400 49px/1 var(--font-display)}.reg-arrow small{display:block;margin-top:12px;font:600 10px/1 var(--font-mono);letter-spacing:.1em;color:var(--muted)}
+    .ownership-rail{position:absolute;left:110px;right:110px;bottom:22px;height:76px;border-top:2px solid var(--pln-deep);display:flex;align-items:center;justify-content:space-around;font:600 13px/1 var(--font-mono);letter-spacing:.08em;color:var(--pln-deep)}.ownership-rail b{position:absolute;left:50%;top:-10px;transform:translateX(-50%);padding:0 20px;background:#f8fcfd;font:600 11px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-teal)}
+
+    /* Slide 16 — animated management feedback loop */
+    .management-loop{position:relative;height:620px;margin-top:14px}
+    .infinity-loop{position:absolute;inset:0;width:100%;height:610px;overflow:visible}.infinity-loop path{fill:none;stroke:rgba(3,91,113,.13);stroke-width:18;stroke-linecap:round}.infinity-loop .loop-dash{stroke:var(--pln-teal);stroke-width:4;stroke-dasharray:26 22;animation:march 2.8s linear infinite}
+    .loop-side{position:absolute;top:106px;width:430px;height:390px}.loop-decisions{left:158px}.loop-measures{right:158px;text-align:right}
+    .loop-heading>span{font:600 12px/1 var(--font-mono);letter-spacing:.14em;color:var(--pln-teal)}.loop-heading h3{margin-top:12px;font:400 34px/1 var(--font-display);color:var(--pln-deep)}
+    .loop-side ul{margin-top:28px;display:flex;flex-wrap:wrap;gap:12px;list-style:none}.loop-measures ul{justify-content:flex-end}.loop-side li{padding:11px 17px;border-radius:999px;background:white;border:1px solid rgba(3,91,113,.16);font-size:17px;color:var(--ink);box-shadow:0 9px 20px rgba(3,91,113,.06)}
+    .loop-core{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;box-shadow:0 23px 70px rgba(3,91,113,.25);z-index:2}.loop-core small{font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:#9feaf4}.loop-core strong{margin-top:15px;font:400 44px/.9 var(--font-display)}.loop-core span{margin-top:18px;font:600 14px/1.45 var(--font-mono);color:#c6edf2}
+    .loop-feedback{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);font:600 12px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}
+    .decision-foot{margin-top:0;font-size:16px;letter-spacing:.12em}
+
+    /* Remaining-slide consistency pass — reduce rigid card language */
+    .agenda-item{width:330px;min-height:112px;padding:15px 18px 17px 38px;border:0;border-bottom:2px solid rgba(0,162,185,.3);background:transparent;box-shadow:none}
+    .agenda-item::before{content:'';position:absolute;left:5px;top:23px;width:14px;height:14px;border-radius:50%;background:var(--pln-cyan);box-shadow:0 0 0 9px rgba(0,175,240,.1)}
+    .agenda-core{width:380px;height:230px;left:600px;top:210px;border-radius:48% 52% 56% 44% / 46% 43% 57% 54%}
+    .agenda-orbit{border-width:3px}
+
+    .code-pipeline{margin-top:52px}.code-pipeline::before{top:79px;height:5px}
+    .code-step{min-height:270px;padding:15px 18px;border:0;background:transparent;box-shadow:none}
+    .code-icon{width:128px;height:128px;margin-bottom:24px;background:#e2f8fc;box-shadow:0 0 0 12px rgba(0,162,185,.07);transition:.3s var(--ease)}
+    .code-step:hover .code-icon{transform:translateY(-9px) rotate(5deg);background:var(--pln-teal);color:white;box-shadow:0 0 0 18px rgba(0,162,185,.1)}
+    .terminal{margin-top:12px;height:185px;border-radius:20px 20px 90px 20px;padding:30px 34px}
+
+    .risk-copy{padding:34px 8px 25px 18px;background:transparent;border:0;border-top:8px solid var(--pln-red);box-shadow:none}
+    .risk-copy ul{gap:0}.risk-copy li{padding:15px 3px;border:0;border-bottom:1px solid rgba(3,91,113,.17);background:transparent}
+    .verify-btn{border:0;border-radius:999px;padding:16px 24px;box-shadow:0 10px 25px rgba(160,160,0,.15);transition:.2s ease}.verify-btn:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(160,160,0,.23)}
+
+    .verify-path{margin-top:62px}
+    .checkpoint{width:286px;height:206px;padding:34px;border:3px solid rgba(0,162,185,.22);border-radius:50%;display:grid;align-content:center;background:rgba(221,246,252,.78);box-shadow:0 18px 40px rgba(3,91,113,.08)}
+    .checkpoint:nth-of-type(even){background:rgba(255,254,208,.56)}
+    .checkpoint::after{bottom:-22px}.verified-seal{border-radius:999px;right:18px;bottom:0;padding:19px 28px}
+
+    .risk-legend{gap:0}.risk-item{position:relative;padding:26px 12px 23px 38px;border:0;border-bottom:1px solid rgba(3,91,113,.17);background:transparent;box-shadow:none}.risk-item::before{content:'';position:absolute;left:6px;top:32px;width:14px;height:14px;border-radius:50%;background:var(--pln-cyan);box-shadow:0 0 0 8px rgba(0,175,240,.1)}.risk-item:nth-child(2)::before{background:var(--pln-teal)}.risk-item:nth-child(3)::before{background:#d7ce00}.risk-item:nth-child(4)::before{background:var(--pln-red)}
+
+    .closing-grid{gap:34px;margin-top:36px}.demo-panel{min-height:300px;padding:42px 48px;border:0;border-radius:145px;background:rgba(221,246,252,.76);box-shadow:inset 0 0 0 2px rgba(0,162,185,.13)}.demo-panel:nth-child(2){border:0;background:rgba(255,254,208,.68);box-shadow:inset 0 0 0 2px rgba(195,196,0,.16)}
+    .io-box{padding:19px 22px;border:0;border-radius:999px;background:white;box-shadow:0 8px 24px rgba(3,91,113,.07)}
+    .closing-statement{margin-top:34px}.closing-statement div{padding:18px 26px 18px 30px;border:0;border-left:7px solid var(--pln-cyan);background:transparent}.closing-statement div:nth-child(2){border-left-color:var(--pln-red)}.closing-statement div:nth-child(3){border-left-color:#d2d500}
+    .closing-logos{background:transparent;padding:0}
+
+    /* ===========================================
+       REVISION 4 — EXPLICIT RELATIONSHIPS
+       =========================================== */
+    /* Slide 05: every question has a real connection to the center */
+    .agenda-star{position:relative;width:1580px;height:650px;margin:8px auto 0}
+    .agenda-links{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.agenda-links path{fill:none;stroke:rgba(0,162,185,.42);stroke-width:4;stroke-linecap:round;stroke-dasharray:14 12;animation:march 3s linear infinite}
+    .agenda-center{position:absolute;left:600px;top:205px;width:380px;height:220px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;box-shadow:0 24px 70px rgba(3,91,113,.22);z-index:2}.agenda-center small{font:600 11px/1 var(--font-mono);letter-spacing:.14em;color:#a9edf5}.agenda-center strong{margin-top:15px;font:400 35px/1.08 var(--font-display)}
+    .agenda-question{position:absolute;min-height:110px;color:var(--pln-deep);z-index:3}.agenda-question h3{font:400 28px/1 var(--font-display)}.agenda-question p{margin-top:10px;font-size:18px;line-height:1.3;color:var(--muted)}.question-anchor{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--pln-cyan);border:6px solid #f8fcfd;box-shadow:0 0 0 9px rgba(0,175,240,.12)}
+    .aq1{left:60px;top:82px;width:380px;padding-right:66px;text-align:right}.aq1 .question-anchor{right:-17px;top:36px}
+    .aq2{left:1140px;top:82px;width:380px;padding-left:66px}.aq2 .question-anchor{left:-17px;top:36px}
+    .aq3{left:1240px;top:355px;width:300px;padding-left:66px}.aq3 .question-anchor{left:-17px;top:38px;background:var(--pln-teal)}
+    .aq4{left:40px;top:355px;width:300px;padding-right:66px;text-align:right}.aq4 .question-anchor{right:-17px;top:38px;background:var(--pln-teal)}
+    .aq5{left:650px;top:515px;width:280px;padding-top:55px;text-align:center}.aq5 .question-anchor{left:123px;top:-17px;background:var(--pln-red)}
+
+    /* Slide 06: a three-step proof before the final allocation bar */
+    .capacity-proof{position:relative;height:650px;margin-top:26px}
+    .proof-flow{display:grid;grid-template-columns:350px 160px 350px 160px 350px;justify-content:center;align-items:center;gap:0}
+    .proof-step{height:270px;border-radius:51% 49% 47% 53% / 45% 52% 48% 55%;display:grid;place-items:center;align-content:center;text-align:center;padding:42px;background:var(--soft-cyan);box-shadow:inset 0 0 0 3px rgba(0,162,185,.15),0 18px 45px rgba(3,91,113,.08)}.ps2{background:rgba(255,254,208,.72);border-radius:46% 54% 54% 46% / 53% 44% 56% 47%}.ps3{background:var(--pln-teal);color:white;box-shadow:0 20px 55px rgba(0,162,185,.22)}
+    .proof-tag{font:600 11px/1 var(--font-mono);letter-spacing:.12em;color:var(--pln-teal)}.ps2 .proof-tag{color:#858600}.ps3 .proof-tag{color:#c9f8fd}.proof-step strong{margin-top:17px;font:400 58px/.92 var(--font-display);color:var(--pln-deep)}.ps3 strong{color:white}.proof-step p{margin-top:17px;max-width:260px;font-size:18px;line-height:1.32;color:var(--muted)}.ps3 p{color:#e0f8fb}
+    .proof-arrow{display:grid;place-items:center;align-content:center;text-align:center;padding:0 12px;color:var(--pln-deep)}.proof-arrow span{font:400 43px/.9 var(--font-display)}.proof-arrow small{margin-top:10px;font-size:14px;line-height:1.25;color:var(--muted)}.proof-arrow b{display:block;margin-top:11px;font:400 38px/1 var(--font-display);color:var(--pln-teal)}
+    .proof-summary{display:grid;grid-template-columns:220px 1fr;gap:25px;align-items:center;width:1510px;margin:34px auto 0}.summary-label span{display:block;font:600 12px/1 var(--font-mono);letter-spacing:.14em;color:var(--pln-teal)}.summary-label b{display:block;margin-top:10px;font-size:19px;color:var(--pln-deep)}
+    .summary-bar{height:106px;display:grid;grid-template-columns:70fr 15fr 15fr;overflow:hidden;border-radius:55px;box-shadow:inset 0 0 0 1px rgba(3,91,113,.12)}.summary-bar>div{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;padding:8px}.summary-bar strong{font:400 35px/.9 var(--font-display)}.summary-bar span{font-size:15px;line-height:1.15}.sum-core{background:#dcebef;color:var(--pln-deep)}.sum-admin{background:repeating-linear-gradient(135deg,#fffed5 0 14px,#fff 14px 28px);color:#747500}.sum-back{background:var(--pln-teal);color:white;animation:capacityGlow 2.8s ease-in-out infinite}
+    .proof-note{width:1450px;margin:25px auto 0;padding-top:18px;border-top:1px solid rgba(3,91,113,.16);text-align:center;font-size:18px;color:var(--muted)}.proof-note strong{color:var(--pln-red)}
+
+    /* Slide 07: routes terminate at nodes, never behind text */
+    .value-routing{position:relative;height:650px;margin-top:8px}
+    .routing-lines{position:absolute;inset:0;width:100%;height:620px;overflow:visible}.routing-lines path{fill:none;stroke:rgba(0,162,185,.56);stroke-width:6;stroke-linecap:round}.routing-lines #routeIn{stroke:var(--pln-deep);stroke-width:9}.routing-pulses circle{filter:drop-shadow(0 0 8px rgba(0,175,240,.75))}
+    .routing-source{position:absolute;left:60px;top:210px;width:260px;height:190px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;box-shadow:0 22px 65px rgba(3,91,113,.2)}.routing-source strong{font:400 58px/.9 var(--font-display);color:#a6eff7}.routing-source span{margin-top:12px;font:600 17px/1.2 var(--font-mono)}
+    .routing-hub{position:absolute;left:535px;top:220px;width:170px;height:170px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-yellow);color:var(--pln-deep);box-shadow:0 0 0 14px rgba(255,255,0,.18),0 18px 45px rgba(3,91,113,.12)}.routing-hub small{font:600 10px/1 var(--font-mono);letter-spacing:.1em}.routing-hub strong{margin-top:9px;font:400 19px/1 var(--font-display)}
+    .routing-target{position:absolute;left:1050px;width:625px;min-height:72px;display:grid;grid-template-columns:64px 1fr;gap:25px;align-items:center;padding:0 0 11px;border-bottom:1px solid rgba(3,91,113,.16)}.routing-target>span{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#f8fcfd;border:3px solid var(--pln-teal);color:var(--pln-deep);font:600 14px/1 var(--font-mono);box-shadow:0 0 0 8px rgba(0,162,185,.09)}.routing-target strong{font:400 26px/1 var(--font-display);color:var(--pln-deep)}.routing-target small{display:block;margin-top:7px;font-size:16px;color:var(--muted)}
+    .rt1{top:28px}.rt2{top:150px}.rt3{top:273px}.rt4{top:396px}.rt5{top:518px}
+    .routing-note{position:absolute;left:355px;bottom:1px;width:630px;text-align:center;font-size:18px;line-height:1.35;color:var(--muted)}.routing-note b{color:var(--pln-deep)}
+
+    /* Slide 14: node centers now sit precisely on the ellipse */
+    .pn1{left:242px;top:148px}.pn2{left:344px;top:379px}.pn3{left:796px;top:463px}.pn4{right:344px;top:379px}.pn5{right:242px;top:148px}
+
+    /* Slide 16: clean three-part feedback system */
+    .feedback-system{position:relative;height:640px;margin-top:4px}
+    .feedback-arrows{position:absolute;inset:0;width:100%;height:620px;overflow:visible}.feedback-arrows path{fill:none;stroke:rgba(0,162,185,.5);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 14;animation:march 3.2s linear infinite}
+    .feedback-node{position:absolute;top:160px;width:500px;height:330px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;padding:64px;background:var(--soft-cyan);color:var(--pln-deep);box-shadow:inset 0 0 0 3px rgba(0,162,185,.14),0 20px 55px rgba(3,91,113,.08);z-index:2}.fn-direction{left:80px}.fn-evidence{right:80px;background:rgba(255,254,208,.68);box-shadow:inset 0 0 0 3px rgba(198,199,0,.16),0 20px 55px rgba(3,91,113,.08)}.fn-work{left:50%;top:175px;transform:translateX(-50%);width:300px;height:300px;padding:38px;background:var(--pln-deep);color:white;box-shadow:0 25px 70px rgba(3,91,113,.24);z-index:3}
+    .feedback-node>span{font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.fn-work>span{color:#a5edf5}.feedback-node h3{margin-top:17px;font:400 43px/.95 var(--font-display)}.fn-work h3{font-size:54px}.feedback-node p{margin-top:20px;max-width:360px;font-size:20px;line-height:1.45;color:var(--muted)}.fn-work p{color:#cef0f4;font-size:17px}
+    .feedback-return{position:absolute;left:50%;bottom:56px;transform:translateX(-50%);text-align:center;color:var(--pln-deep)}.feedback-return span{display:block;font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.feedback-return strong{display:block;margin-top:10px;font:400 21px/1 var(--font-display)}
+    .feedback-principle{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:920px;padding-top:14px;border-top:1px solid rgba(3,91,113,.16);text-align:center;font-size:18px;color:var(--muted)}.feedback-principle b{color:var(--pln-deep)}
+
+    /* Slide 17 — cinematic handoff to the live demo */
+    .finale{display:grid;grid-template-columns:1.18fr .82fr;width:1920px;height:1080px;background:white}
+    .finale-copy{position:relative;padding:80px 80px 70px 92px;background:linear-gradient(145deg,#fff 0 74%,#f2fbfd 74% 100%)}
+    .finale-logos{display:flex;align-items:center;gap:34px}.finale-logos img:first-child{width:230px}.finale-logos img:last-child{width:245px}
+    .finale-kicker{display:flex;align-items:center;gap:16px;margin-top:162px;font:600 16px/1 var(--font-mono);letter-spacing:.15em;color:var(--pln-teal)}.finale-kicker span{width:78px;height:8px;background:linear-gradient(90deg,var(--pln-yellow) 0 30%,transparent 30% 36%,var(--pln-red) 36% 66%,transparent 66% 72%,var(--pln-cyan) 72%)}
+    .finale-title{margin-top:34px;font:400 118px/.88 var(--font-display);letter-spacing:-.065em;color:var(--pln-deep)}.finale-title span{color:var(--pln-teal)}
+    .finale-line{margin-top:42px;font-size:30px;line-height:1.42;color:var(--muted)}
+    .finale-live{position:absolute;left:92px;bottom:78px;display:flex;align-items:center;gap:15px;padding:14px 22px;border-radius:999px;background:var(--pln-deep);color:white;font:600 14px/1 var(--font-mono);letter-spacing:.12em}.finale-live i{width:13px;height:13px;border-radius:50%;background:var(--pln-red);box-shadow:0 0 0 9px rgba(255,0,0,.12);animation:pulseLive 1.8s ease-in-out infinite}
+    @keyframes pulseLive{50%{box-shadow:0 0 0 16px rgba(255,0,0,0)}}
+    .finale-visual{position:relative;overflow:hidden;background:linear-gradient(155deg,#e9fbfe 0%,#c7f0f6 48%,#f9fbd7 100%)}
+    .finale-visual::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(3,91,113,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(3,91,113,.05) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,transparent 2%,#000 24%,#000 76%,transparent 98%)}
+    .finale-visual::after{content:'MANUSIA';position:absolute;right:-28px;top:116px;writing-mode:vertical-rl;font:600 118px/.8 var(--font-display);letter-spacing:-.06em;color:rgba(255,255,255,.36);pointer-events:none}
+    .finale-fingerprint{position:absolute;left:50%;top:45px;width:780px;height:980px;transform:translateX(-50%);overflow:visible;filter:drop-shadow(0 24px 28px rgba(3,91,113,.08))}
+    .finger-ridges path{fill:none;stroke:url(#fingerGradient);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;path-length:1;stroke-dasharray:1;stroke-dashoffset:1;opacity:.86}
+    .finger-ridges path:nth-child(3n){stroke-width:5;opacity:.58}.finger-ridges path:nth-child(4n){stroke:url(#fingerWarm);opacity:.72}
+    .slide.visible .finger-ridges path{animation:fingerprintDraw 1.6s var(--ease) forwards}.slide.visible .finger-ridges path:nth-child(2){animation-delay:.06s}.slide.visible .finger-ridges path:nth-child(3){animation-delay:.12s}.slide.visible .finger-ridges path:nth-child(4){animation-delay:.18s}.slide.visible .finger-ridges path:nth-child(5){animation-delay:.24s}.slide.visible .finger-ridges path:nth-child(6){animation-delay:.30s}.slide.visible .finger-ridges path:nth-child(7){animation-delay:.36s}.slide.visible .finger-ridges path:nth-child(8){animation-delay:.42s}.slide.visible .finger-ridges path:nth-child(9){animation-delay:.48s}.slide.visible .finger-ridges path:nth-child(10){animation-delay:.54s}.slide.visible .finger-ridges path:nth-child(11){animation-delay:.60s}.slide.visible .finger-ridges path:nth-child(12){animation-delay:.66s}
+    @keyframes fingerprintDraw{to{stroke-dashoffset:0}}
+    .finger-tracer{filter:drop-shadow(0 0 9px rgba(0,175,240,.72))}.finger-tracer.warm{filter:drop-shadow(0 0 8px rgba(255,0,0,.38))}
+    .fingerprint-scan{position:absolute;left:66px;right:66px;top:230px;height:2px;background:linear-gradient(90deg,transparent,var(--pln-cyan) 15% 85%,transparent);box-shadow:0 0 18px rgba(0,175,240,.7);opacity:.76;animation:fingerprintScan 5.2s ease-in-out infinite alternate;z-index:2}.fingerprint-scan::before,.fingerprint-scan::after{content:'';position:absolute;top:-4px;width:10px;height:10px;background:var(--pln-yellow)}.fingerprint-scan::before{left:14%}.fingerprint-scan::after{right:14%;background:var(--pln-red)}
+    @keyframes fingerprintScan{to{transform:translateY(610px);opacity:.34}}
+    .fingerprint-copy{position:absolute;left:58px;bottom:52px;z-index:3;padding-left:20px;border-left:5px solid var(--pln-yellow);color:var(--pln-deep)}.fingerprint-copy small{display:block;font:600 11px/1 var(--font-mono);letter-spacing:.16em;color:var(--pln-teal)}.fingerprint-copy strong{display:block;margin-top:10px;font:400 29px/1 var(--font-display);letter-spacing:-.025em}
+    .fingerprint-index{position:absolute;right:43px;bottom:42px;font:600 10px/1 var(--font-mono);letter-spacing:.14em;color:rgba(3,91,113,.48)}
+    .finale-no{position:absolute;right:38px;top:35px;font:600 14px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal);z-index:5}
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite">
+
+      <!-- === SLIDE 01: OPENING === -->
+      <section class="slide active" data-title="AI at Work" aria-label="Slide 1: AI at Work">
+        <div class="title-layout">
+          <div class="title-left">
+            <div class="title-logos reveal"><img src="assets/plniconplus.png" alt="PLN Icon Plus"><img src="assets/danantara.webp" alt="Danantara Indonesia"></div>
+            <div class="title-kicker reveal d1 editable">Sharing Session · 2026</div>
+            <h1 class="title-main reveal d2 editable">AI <span class="outline">at</span><br>Work</h1>
+            <p class="title-sub reveal d3 editable">Bagaimana AI mengubah produktivitas, cara kerja, dan pengelolaan perusahaan</p>
+            <div class="title-meta editable">PRODUKTIVITAS · CARA KERJA · PENGELOLAAN</div>
+          </div>
+          <div class="title-right">
+            <div class="orbit-system parallax" data-depth="18">
+              <div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="orbit o4"></div>
+              <button class="orbit-core" id="orbitCore" type="button" aria-label="Ubah fokus AI at Work"><span id="orbitCoreText">NILAI<br>+<br>KENDALI</span><small>KLIK UNTUK MELIHAT</small></button>
+              <span class="orbit-label ol1">DATA</span><span class="orbit-label ol2">ALAT</span><span class="orbit-label ol3">MANUSIA</span><span class="orbit-label ol4">TINDAKAN</span>
+            </div>
+            <div class="title-interaction-hint">GERAKKAN POINTER · KLIK BAGIAN TENGAH</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 02: AI CAPABILITY EVOLUTION === -->
+      <section class="slide" data-title="Perkembangan Kemampuan AI" aria-label="Slide 2: Perkembangan Kemampuan AI">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Perkembangan AI</div><h2 class="slide-title editable">AI berkembang dari mencari informasi<br>hingga <span class="accent">menjalankan tugas.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="evolution-field reveal d1">
+            <svg class="evolution-path" viewBox="0 0 1720 610" aria-hidden="true">
+              <path class="evolution-shadow" d="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/>
+              <path class="evolution-dash" d="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/>
+              <circle r="11" fill="#00A2B9"><animateMotion dur="5.5s" repeatCount="indefinite" path="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/></circle>
+            </svg>
+            <article class="evo-step es1"><button class="evo-node" type="button">01</button><h3>Search</h3><p>Mencari informasi</p></article>
+            <article class="evo-step es2"><button class="evo-node" type="button">02</button><h3>Predictive AI</h3><p>Membuat prediksi</p></article>
+            <article class="evo-step es3"><button class="evo-node" type="button">03</button><h3>Generative AI</h3><p>Membuat konten</p></article>
+            <article class="evo-step es4"><button class="evo-node" type="button">04</button><h3>AI Assistant</h3><p>Mendampingi manusia</p></article>
+            <article class="evo-step es5"><button class="evo-node" type="button">05</button><h3>AI Agent</h3><p>Mengerjakan tugas mandiri</p></article>
+            <div class="evolution-axis"><span>INFORMASI</span><span>KREASI</span><span>EKSEKUSI</span></div>
+          </div>
+          <div class="slide-no">02 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 03: ENTERPRISE ADOPTION === -->
+      <section class="slide" data-title="Adopsi AI Memasuki Fase Skala" aria-label="Slide 3: Adopsi AI Memasuki Fase Skala">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Adopsi di Perusahaan</div><h2 class="slide-title editable">Penggunaan AI tumbuh cepat.<br><span class="accent">Aturan dan pengawasannya belum mengikuti.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="evidence-board">
+            <div class="survey-signals reveal">
+              <article class="survey-signal"><div class="signal-ring" style="--p:60"><span class="count" data-value="60" data-suffix="%">0%</span></div><div><h3>AKSES</h3><p class="editable">Pekerja memiliki akses ke alat AI resmi perusahaan.</p></div></article>
+              <article class="survey-signal"><div class="signal-ring" style="--p:66"><span class="count" data-value="66" data-suffix="%">0%</span></div><div><h3>PRODUKTIVITAS</h3><p class="editable">Perusahaan melihat peningkatan produktivitas dan efisiensi.</p></div></article>
+              <article class="survey-signal"><div class="signal-ring" style="--p:25"><span class="count" data-value="25" data-suffix="%">0%</span></div><div><h3>DAMPAK BESAR</h3><p class="editable">Dampak besar dirasakan 25% perusahaan—naik dari 12%.</p></div></article>
+            </div>
+            <div class="readiness-gap reveal d2">
+              <div class="gap-eyebrow">KESIAPAN AI AGENT</div>
+              <h3>Rencana adopsi tinggi.<br><span>Aturan dan pengawasan belum siap.</span></h3>
+              <div class="comparison-bar"><div class="comparison-label"><span>Rencana adopsi dalam 2 tahun</span><strong>74%</strong></div><div class="bar-track"><i style="--w:74%"></i></div></div>
+              <div class="comparison-bar mature"><div class="comparison-label"><span>Aturan AI agent yang sudah matang</span><strong>21%</strong></div><div class="bar-track"><i style="--w:21%"></i></div></div>
+              <div class="gap-number"><strong class="count" data-value="53" data-suffix=" POIN">0</strong><span>selisih antara rencana dan kesiapan</span></div>
+              <p class="chart-note">Empat temuan survei yang berbeda—bukan satu rangkaian waktu.</p>
+            </div>
+          </div>
+          <div class="source editable">Sumber: Deloitte, State of AI in the Enterprise 2026 — survei 3.235 pemimpin bisnis dan TI di 24 negara (Agustus–September 2025).</div><div class="slide-no">03 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 04: DAILY WORKFLOW === -->
+      <section class="slide" data-title="AI dalam Pekerjaan Sehari-hari" aria-label="Slide 4: AI dalam Pekerjaan Sehari-hari">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Pekerjaan Sehari-hari</div><h2 class="slide-title editable">AI membantu menyiapkan pekerjaan.<br>Manusia tetap <span class="accent">menilai hasilnya.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="dayflow">
+            <div class="day-line"></div><div class="day-token"></div>
+            <article class="day-step ds1 reveal"><h3>Informasi</h3><p class="editable">Merangkum laporan, email, dan dokumen.</p></article><span class="time-label t1">08:00</span>
+            <article class="day-step ds2 reveal d1"><h3>Komunikasi</h3><p class="editable">Menyusun proposal, presentasi, dan tanggapan.</p></article><span class="time-label t2">09:30</span>
+            <article class="day-step ds3 reveal d2"><h3>Analisis</h3><p class="editable">Membandingkan data, pilihan, dan risiko.</p></article><span class="time-label t3">11:00</span>
+            <article class="day-step ds4 reveal d3"><h3>Persiapan</h3><p class="editable">Menyiapkan rapat, laporan, dan keputusan.</p></article><span class="time-label t4">14:00</span>
+            <article class="day-step ds5 reveal d4"><h3>Pelaksanaan</h3><p class="editable">Mengubah file dan menjalankan alur kerja.</p></article><span class="time-label t5">16:30</span>
+          </div><div class="slide-no">04 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 05: MANAGEMENT AGENDA === -->
+      <section class="slide" data-title="Agenda Manajemen" aria-label="Slide 5: Agenda Manajemen">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Lima Pertanyaan</div><h2 class="slide-title editable">AI perlu dikelola sebagai agenda bisnis,<br>bukan hanya sebagai <span class="accent">urusan teknologi.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="agenda-star reveal d1">
+            <svg class="agenda-links" viewBox="0 0 1580 650" aria-hidden="true">
+              <path d="M790 315 L440 135"/><path d="M790 315 L1140 135"/><path d="M790 315 L1240 410"/><path d="M790 315 L340 410"/><path d="M790 315 L790 515"/>
+            </svg>
+            <div class="agenda-center"><small>LIMA PERTANYAAN</small><strong>YANG PERLU<br>DIJAWAB</strong></div>
+            <article class="agenda-question aq1"><span class="question-anchor"></span><div><h3>Produktivitas</h3><p class="editable">Berapa banyak waktu yang bisa dihemat?</p></div></article>
+            <article class="agenda-question aq2"><span class="question-anchor"></span><div><h3>Kapasitas</h3><p class="editable">Waktu yang dihemat akan digunakan untuk apa?</p></div></article>
+            <article class="agenda-question aq3"><span class="question-anchor"></span><div><h3>Kualitas</h3><p class="editable">Bagaimana memastikan hasil AI benar?</p></div></article>
+            <article class="agenda-question aq4"><span class="question-anchor"></span><div><h3>Tenaga Kerja</h3><p class="editable">Bagaimana tugas dan keterampilan berubah?</p></div></article>
+            <article class="agenda-question aq5"><span class="question-anchor"></span><div><h3>Kendali</h3><p class="editable">Data apa yang boleh diakses, dan tindakan apa yang boleh dilakukan AI?</p></div></article>
+          </div><div class="slide-no">05 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 06: ECONOMIC VALUE === -->
+      <section class="slide" data-title="Nilai Ekonomi Waktu Karyawan" aria-label="Slide 6: Nilai Ekonomi Waktu Karyawan">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Nilai Waktu</div><h2 class="slide-title editable">Contoh sederhana: AI dapat membebaskan<br><span class="accent">15% waktu kerja.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="capacity-proof">
+            <div class="proof-flow">
+              <article class="proof-step ps1 reveal"><span class="proof-tag">TITIK AWAL · 100%</span><strong>Rp30 jt</strong><p class="editable">Total biaya tenaga kerja per bulan</p></article>
+              <div class="proof-arrow reveal d1"><span>30%</span><small>waktu dipakai untuk pekerjaan administrasi</small><b>→</b></div>
+              <article class="proof-step ps2 reveal d2"><span class="proof-tag">BAGIAN ADMIN · 30%</span><strong>Rp9 jt</strong><p class="editable">Nilai waktu pada pekerjaan administratif</p></article>
+              <div class="proof-arrow reveal d3"><span>50%</span><small>AI mengurangi separuh waktu administrasi</small><b>→</b></div>
+              <article class="proof-step ps3 reveal d4"><span class="proof-tag">HASIL · 15% TOTAL</span><strong>Rp4,5 jt</strong><p class="editable">Nilai waktu yang bisa dipakai untuk pekerjaan lain</p></article>
+            </div>
+            <div class="proof-summary reveal d4"><div class="summary-label"><span>SETELAH AI</span><b>100% waktu kerja</b></div><div class="summary-bar"><div class="sum-core"><strong>70%</strong><span>Pekerjaan utama</span></div><div class="sum-admin"><strong>15%</strong><span>Admin tersisa</span></div><div class="sum-back"><strong>15%</strong><span>Waktu kembali</span></div></div></div>
+            <div class="proof-note editable"><strong>Penting:</strong> Rp4,5 juta adalah nilai waktu yang bisa digunakan untuk pekerjaan lain—bukan penghematan tunai otomatis.</div>
+          </div><div class="slide-no">06 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 07: CAPACITY OUTCOMES === -->
+      <section class="slide" data-title="Pemanfaatan Kapasitas Tambahan" aria-label="Slide 7: Pemanfaatan Kapasitas Tambahan">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Dari Waktu ke Nilai</div><h2 class="slide-title editable">Waktu yang dihemat baru bernilai<br>jika digunakan untuk <span class="accent">hasil bisnis.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="value-routing reveal">
+            <svg class="routing-lines" viewBox="0 0 1700 620" aria-hidden="true">
+              <path id="routeIn" d="M320 305 C410 305 470 305 535 305"/>
+              <path id="routeA" d="M705 305 C820 305 900 60 1082 60"/><path id="routeB" d="M705 305 C835 305 910 182 1082 182"/><path id="routeC" d="M705 305 L1082 305"/><path id="routeD" d="M705 305 C835 305 910 428 1082 428"/><path id="routeE" d="M705 305 C820 305 900 550 1082 550"/>
+              <g class="routing-pulses" fill="#00AFF0"><circle r="8"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#routeIn"/></animateMotion></circle><circle r="8"><animateMotion dur="4s" repeatCount="indefinite"><mpath href="#routeA"/></animateMotion></circle><circle r="8"><animateMotion dur="4s" begin="-.8s" repeatCount="indefinite"><mpath href="#routeB"/></animateMotion></circle><circle r="8"><animateMotion dur="4s" begin="-1.6s" repeatCount="indefinite"><mpath href="#routeC"/></animateMotion></circle><circle r="8"><animateMotion dur="4s" begin="-2.4s" repeatCount="indefinite"><mpath href="#routeD"/></animateMotion></circle><circle r="8"><animateMotion dur="4s" begin="-3.2s" repeatCount="indefinite"><mpath href="#routeE"/></animateMotion></circle></g>
+            </svg>
+            <div class="routing-source"><strong>15%</strong><span>WAKTU<br>KEMBALI</span></div>
+            <div class="routing-hub"><small>KEPUTUSAN</small><strong>ARAHKAN</strong></div>
+            <article class="routing-target rt1 editable"><span>01</span><div><strong>Pelanggan</strong><small>Melayani lebih banyak tanpa menurunkan kualitas.</small></div></article>
+            <article class="routing-target rt2 editable"><span>02</span><div><strong>Pekerjaan tertunda</strong><small>Membawa pekerjaan tertunda kembali ke prioritas utama.</small></div></article>
+            <article class="routing-target rt3 editable"><span>03</span><div><strong>Kualitas</strong><small>Memperbanyak pemeriksaan dan validasi.</small></div></article>
+            <article class="routing-target rt4 editable"><span>04</span><div><strong>Keputusan</strong><small>Menyiapkan opsi dan bukti lebih cepat.</small></div></article>
+            <article class="routing-target rt5 editable"><span>05</span><div><strong>Pendapatan</strong><small>Mengejar peluang yang sebelumnya tertunda.</small></div></article>
+            <div class="routing-note">Waktu yang dihemat menjadi bernilai ketika <b>manajemen menentukan penggunaannya.</b></div>
+          </div><div class="slide-no">07 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 08: ASSISTANT VS AGENT === -->
+      <section class="slide" data-title="AI Assistant dan AI Agent" aria-label="Slide 8: AI Assistant dan AI Agent">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Cara Kerja AI</div><h2 class="slide-title editable">AI assistant menunggu instruksi.<br>AI agent bekerja menuju <span class="accent">tujuan yang ditetapkan.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="authority-map">
+            <article class="authority-lane assistant-flow reveal">
+              <div class="lane-name"><span>01</span><h3>AI Assistant</h3><p class="editable">Manusia memberikan instruksi pada setiap langkah.</p></div>
+              <div class="lane-flow"><div class="flow-node human">MANUSIA<small>Instruksi</small></div><div class="flow-link"></div><div class="flow-node ai">AI<small>Respons</small></div><div class="flow-link"></div><div class="flow-node human">MANUSIA<small>Instruksi berikut</small></div></div>
+              <div class="lane-control">MANUSIA MENGARAHKAN SETIAP LANGKAH</div>
+            </article>
+            <article class="authority-lane agent-flow reveal d1">
+              <div class="lane-name"><span>02</span><h3>AI Agent</h3><p class="editable">Manusia menetapkan tujuan, aturan, dan kapan hasil harus disetujui.</p></div>
+              <div class="lane-flow"><div class="flow-node human">MANUSIA<small>Tujuan + aturan</small></div><div class="flow-link"></div><div class="flow-node ai">RENCANA<small>Langkah kerja</small></div><div class="flow-link"></div><div class="flow-node ai">ALAT<small>Pelaksanaan</small></div><div class="flow-link"></div><div class="flow-node human approval">PERSETUJUAN<small>Periksa hasil</small></div></div>
+              <div class="lane-control">AI BEKERJA LEBIH MANDIRI · ATURAN DAN PEMERIKSAAN DIPERKUAT</div>
+            </article>
+          </div><div class="authority-principle editable"><span>Prinsip utama</span> Semakin mandiri AI bekerja, semakin ketat aturan tentang data, tindakan, dan persetujuan.</div><div class="slide-no">08 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 09: CODING AGENT === -->
+      <section class="slide" data-title="Coding Agent sebagai Contoh" aria-label="Slide 9: Coding Agent sebagai Contoh">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Contoh AI Agent untuk Coding</div><h2 class="slide-title editable">Coding agent dapat menulis, menguji,<br>dan <span class="accent">melaporkan perubahan kode.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="code-pipeline">
+            <article class="code-step interactive-card reveal"><div class="code-icon">01</div><h3>Memahami</h3><p>Tujuan dan kode yang sudah ada.</p></article><article class="code-step interactive-card reveal d1"><div class="code-icon">02</div><h3>Merencanakan</h3><p>Langkah dan berkas terkait.</p></article><article class="code-step interactive-card reveal d2"><div class="code-icon">03</div><h3>Mengubah</h3><p>Kode, konfigurasi, dokumen.</p></article><article class="code-step interactive-card reveal d3"><div class="code-icon">04</div><h3>Menguji</h3><p>Pengujian dan pemeriksaan kualitas.</p></article><article class="code-step interactive-card reveal d4"><div class="code-icon">05</div><h3>Melaporkan</h3><p>Hasil, risiko, dan tindak lanjut.</p></article>
+          </div>
+          <div class="terminal reveal d5"><span class="editable">$ agent run "perbaiki validasi pembayaran"<br>✓ 4 berkas diubah &nbsp; ✓ 28 pengujian lulus &nbsp; △ perlu tinjauan keamanan</span> <span class="cursor"></span></div>
+          <div class="slide-no">09 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 10: HUMAN AND AI ROLES === -->
+      <section class="slide" data-title="Pembagian Peran Manusia dan AI" aria-label="Slide 10: Pembagian Peran Manusia dan AI">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Pembagian Peran</div><h2 class="slide-title editable">AI mempercepat pekerjaan.<br>Manusia tetap <span class="accent">menilai dan memutuskan.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="collaboration-system reveal">
+            <svg class="collab-links" viewBox="0 0 1744 620" aria-hidden="true">
+              <path class="ai-link" d="M494 186 C578 186 642 177 710 186"/><path class="ai-link" d="M494 237 C572 237 625 230 683 237"/><path class="ai-link" d="M494 288 C568 288 620 284 672 288"/><path class="ai-link" d="M494 339 C568 339 620 345 674 339"/>
+              <path class="human-link" d="M1034 186 C1102 177 1167 186 1251 186"/><path class="human-link" d="M1061 237 C1119 230 1172 237 1251 237"/><path class="human-link" d="M1072 288 C1124 284 1177 288 1251 288"/><path class="human-link" d="M1070 339 C1124 345 1177 339 1251 339"/>
+            </svg>
+            <div class="role-cluster ai-role"><div class="role-heading"><span>AI</span><small>KECEPATAN + VOLUME</small></div><ul><li>Memproses informasi</li><li>Membuat draf</li><li>Menemukan pola</li><li>Menjalankan tugas rutin</li></ul></div>
+            <div class="augmented-core"><div class="core-ring"></div><strong>KERJA<br>BERSAMA</strong><span>AI membantu menghasilkan.<br>Manusia menilai.</span></div>
+            <div class="role-cluster human-role"><div class="role-heading"><span>MANUSIA</span><small>KONTEKS + TANGGUNG JAWAB</small></div><ul><li>Memahami konteks</li><li>Menilai kualitas</li><li>Menangani pengecualian</li><li>Mengambil keputusan</li></ul></div>
+            <p class="collab-caption editable">AI mempercepat pekerjaan. Manusia memahami konteks, memeriksa kualitas, dan mengambil keputusan.</p>
+          </div><div class="slide-no">10 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 11: HALLUCINATION === -->
+      <section class="slide" data-title="Halusinasi AI" aria-label="Slide 11: Halusinasi AI">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Meyakinkan ≠ Benar</div><h2 class="slide-title editable">Jawaban AI bisa terlihat meyakinkan.<br><span class="red">Tetap perlu diperiksa.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="hallucination-layout">
+            <div class="report-sheet reveal" id="reportSheet"><h3>Laporan Kinerja — Ringkasan</h3><div class="report-lines"><div class="report-line"></div><div class="report-line"></div><div class="report-line"></div><div class="report-line"></div></div><div class="false-claim editable">“Pendapatan tumbuh sebesar <strong>18%</strong>.”</div><div class="stamp">TIDAK ADA DI SUMBER</div></div>
+            <div class="risk-copy reveal d1"><h3>Halusinasi AI</h3><p class="editable">Jawaban yang terdengar meyakinkan, tetapi salah atau tidak didukung sumber.</p><ul><li>Angka yang tidak tersedia</li><li>Referensi palsu</li><li>Konteks yang salah</li><li>Kesimpulan di luar data</li></ul><button class="verify-btn" id="verifyClaim">Periksa klaim 18%</button></div>
+          </div><div class="slide-no">11 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 12: HALLUCINATION CONTROLS === -->
+      <section class="slide" data-title="Pengendalian Halusinasi" aria-label="Slide 12: Pengendalian Halusinasi">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Alur Pemeriksaan</div><h2 class="slide-title editable">Semakin besar dampak sebuah keputusan,<br>semakin <span class="accent">teliti hasil AI harus diperiksa.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="verify-path">
+            <div class="verify-line"><div class="verify-progress"></div></div>
+            <article class="checkpoint cp1 interactive-card reveal"><h3>Sumber</h3><p class="editable">Apakah sumbernya tersedia?</p></article><article class="checkpoint cp2 interactive-card reveal d1"><h3>Bukti</h3><p class="editable">Apakah jawaban didukung dokumen?</p></article><article class="checkpoint cp3 interactive-card reveal d2"><h3>Ketepatan</h3><p class="editable">Apakah angka, nama, dan tanggal diperiksa?</p></article><article class="checkpoint cp4 interactive-card reveal d3"><h3>Persetujuan</h3><p class="editable">Siapa yang menyetujui hasilnya?</p></article>
+            <div class="verified-seal reveal d4">✓ TERPERIKSA</div>
+          </div><div class="slide-no">12 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 13: RISK LEVELS === -->
+      <section class="slide" data-title="Tingkat Risiko Penggunaan AI" aria-label="Slide 13: Tingkat Risiko Penggunaan AI">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Risiko = Akses × Tindakan</div><h2 class="slide-title editable">Risiko meningkat jika AI dapat mengakses<br><span class="red">data sensitif dan melakukan tindakan.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="risk-layout">
+            <div class="risk-matrix reveal"><span class="axis-y">Akses data →</span><span class="axis-x">Kemampuan bertindak →</span><button class="risk-dot rd1" aria-label="Brainstorming umum"></button><button class="risk-dot rd2" aria-label="Analisis dokumen internal"></button><button class="risk-dot rd3" aria-label="Rekomendasi bisnis"></button><button class="risk-dot rd4" aria-label="AI Agent pada sistem"></button><span class="matrix-label ml1">Brainstorming</span><span class="matrix-label ml2">Dokumen internal</span><span class="matrix-label ml3">Rekomendasi bisnis</span><span class="matrix-label ml4">Agent pada sistem</span></div>
+            <div class="risk-legend"><article class="risk-item interactive-card reveal"><strong>Rendah</strong><p>Publik · tanpa tindakan</p></article><article class="risk-item interactive-card reveal d1"><strong>Sedang</strong><p>Internal · analisis saja</p></article><article class="risk-item interactive-card reveal d2"><strong>Tinggi</strong><p>Mempengaruhi keputusan</p></article><article class="risk-item interactive-card reveal d3"><strong>Sangat tinggi</strong><p>Data + sistem + perubahan</p></article></div>
+          </div><div class="slide-no">13 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 14: AI USAGE POLICY === -->
+      <section class="slide" data-title="AI Usage Policy" aria-label="Slide 14: AI Usage Policy">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Batas Penggunaan</div><h2 class="slide-title editable">Kebijakan yang jelas membuat penggunaan AI<br><span class="accent">lebih aman dan produktif.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="policy-wheel reveal">
+            <svg class="policy-orbit" viewBox="0 0 1744 610" aria-hidden="true"><ellipse cx="872" cy="304" rx="590" ry="235"/><ellipse class="policy-trace" cx="872" cy="304" rx="590" ry="235"/></svg>
+            <div class="policy-core"><span>PENGGUNAAN AI YANG AMAN</span><strong id="policyTitle">Lima hal yang<br>harus ditetapkan.</strong><p id="policyDetail">Klik setiap titik untuk melihat pertanyaannya.</p></div>
+            <button class="policy-node pn1" type="button" data-policy-title="APLIKASI" data-policy-detail="Aplikasi apa yang disetujui perusahaan?"><span>01</span><strong>APLIKASI</strong></button>
+            <button class="policy-node pn2" type="button" data-policy-title="DATA" data-policy-detail="Informasi apa yang boleh diproses?"><span>02</span><strong>DATA</strong></button>
+            <button class="policy-node pn3" type="button" data-policy-title="HASIL" data-policy-detail="Kapan hasil wajib diverifikasi?"><span>03</span><strong>HASIL</strong></button>
+            <button class="policy-node pn4" type="button" data-policy-title="TINDAKAN" data-policy-detail="Tindakan apa yang perlu persetujuan?"><span>04</span><strong>TINDAKAN</strong></button>
+            <button class="policy-node pn5" type="button" data-policy-title="TANGGUNG JAWAB" data-policy-detail="Siapa yang bertanggung jawab atas hasilnya?"><span>05</span><strong>TANGGUNG<br>JAWAB</strong></button>
+            <div class="policy-hint">ARAHKAN POINTER ATAU KLIK SETIAP TITIK</div>
+          </div><div class="slide-no">14 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 15: INDONESIAN REGULATORY CONTEXT === -->
+      <section class="slide" data-title="Konteks Regulasi Indonesia" aria-label="Slide 15: Konteks Regulasi Indonesia">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Konteks Indonesia</div><h2 class="slide-title editable">Kepatuhan AI dimulai dari<br><span class="accent">data, sistem, dan cara penggunaannya.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="regulatory-flow">
+            <article class="reg-stage data-stage reveal"><div class="reg-number">01</div><div class="reg-blob"><small>MASUKAN</small><h3>DATA</h3><p class="editable">Tujuan penggunaan · keamanan · hak pemilik data</p></div><strong>UU 27/2022 · PDP</strong></article>
+            <div class="reg-arrow"><span>→</span><small>DIPROSES</small></div>
+            <article class="reg-stage system-stage reveal d1"><div class="reg-number">02</div><div class="reg-blob"><small>PROSES</small><h3>SISTEM</h3><p class="editable">Andal · aman · dapat dipertanggungjawabkan</p></div><strong>PP 71/2019 · PSTE</strong></article>
+            <div class="reg-arrow"><span>→</span><small>MENGHASILKAN</small></div>
+            <article class="reg-stage use-stage reveal d2"><div class="reg-number">03</div><div class="reg-blob"><small>HASIL + TINDAKAN</small><h3>PENGGUNAAN AI</h3><p class="editable">Terbuka · bertanggung jawab · menjaga privasi dan hak cipta</p></div><strong>SE MENKOMINFO 9/2023</strong></article>
+            <div class="ownership-rail"><span>PEMILIK PROSES</span><span>HUKUM</span><span>KEPATUHAN</span><span>KEAMANAN INFORMASI</span><b>TANGGUNG JAWAB LINTAS FUNGSI</b></div>
+          </div><div class="source editable">Rujukan: UU No. 27/2022 (PDP); PP No. 71/2019 (PSTE); SE Menkominfo No. 9/2023 (Etika AI). Materi pengenalan—bukan pendapat hukum.</div><div class="slide-no">15 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 16: MANAGEMENT DECISIONS & METRICS === -->
+      <section class="slide" data-title="Keputusan dan Ukuran Keberhasilan" aria-label="Slide 16: Keputusan dan Ukuran Keberhasilan">
+        <div class="slide-shell">
+          <header class="slide-head"><div><div class="kicker">Ukur Hasilnya</div><h2 class="slide-title editable">Keberhasilan AI diukur dari hasil kerja,<br><span class="accent">bukan dari jumlah lisensi.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <div class="feedback-system reveal">
+            <svg class="feedback-arrows" viewBox="0 0 1744 620" aria-hidden="true">
+              <path id="forwardPath" d="M410 245 C610 70 1134 70 1334 245"/>
+              <path id="returnPath" d="M1334 420 C1120 600 624 600 410 420"/>
+              <circle r="10" fill="#00AFF0"><animateMotion dur="4.5s" repeatCount="indefinite"><mpath href="#forwardPath"/></animateMotion></circle>
+              <circle r="10" fill="#00A2B9"><animateMotion dur="4.5s" repeatCount="indefinite"><mpath href="#returnPath"/></animateMotion></circle>
+            </svg>
+            <article class="feedback-node fn-direction"><span>01 · TETAPKAN ARAH</span><h3>Keputusan</h3><p class="editable">Tentukan siapa yang boleh memakai AI, untuk apa, dengan alat apa, dan di bawah aturan siapa.</p></article>
+            <article class="feedback-node fn-work"><span>02 · UBAH CARA KERJA</span><h3>AI dipakai</h3><p class="editable">AI digunakan dalam pekerjaan</p></article>
+            <article class="feedback-node fn-evidence"><span>03 · LIHAT HASIL</span><h3>Bukti hasil</h3><p class="editable">Waktu penyelesaian · jumlah pekerjaan · kualitas · penggunaan · insiden</p></article>
+            <div class="feedback-return"><span>04 · PELAJARI & SESUAIKAN</span><strong>Gunakan hasil untuk memperbaiki keputusan berikutnya</strong></div>
+            <div class="feedback-principle editable">Jumlah lisensi bukan ukuran keberhasilan. <b>Hasil, kualitas, dan keamanan</b> menunjukkan dampaknya.</div>
+          </div><div class="slide-no">16 / 17</div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 17: DEMO & CLOSING === -->
+      <section class="slide" data-title="Demo dan Penutup" aria-label="Slide 17: Demo dan Penutup">
+        <div class="finale">
+          <div class="finale-copy">
+            <div class="finale-logos reveal"><img src="assets/plniconplus.png" alt="PLN Icon Plus"><img src="assets/danantara.webp" alt="Danantara Indonesia"></div>
+            <div class="finale-kicker reveal d1"><span></span> LIHAT CARA KERJANYA</div>
+            <h2 class="finale-title reveal d2 editable">Mari lihat<br><span>cara kerjanya.</span></h2>
+            <p class="finale-line reveal d3 editable">AI membantu kita bekerja lebih cepat.<br>Keputusan tetap di tangan manusia.</p>
+            <div class="finale-live reveal d4"><i></i> LIVE DEMO</div>
+          </div>
+          <div class="finale-visual">
+            <svg class="finale-fingerprint" viewBox="0 0 860 1080" aria-hidden="true">
+              <defs>
+                <linearGradient id="fingerGradient" x1="100" y1="120" x2="720" y2="900" gradientUnits="userSpaceOnUse"><stop stop-color="#00AFF0"/><stop offset=".56" stop-color="#00A2B9"/><stop offset="1" stop-color="#035B71"/></linearGradient>
+                <linearGradient id="fingerWarm" x1="220" y1="180" x2="610" y2="850" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFF00"/><stop offset=".48" stop-color="#00A2B9"/><stop offset="1" stop-color="#FF0000"/></linearGradient>
+                <path id="fingerTraceA" d="M155 596 C133 375 257 165 430 165 C604 165 728 373 705 596"/>
+                <path id="fingerTraceB" d="M306 701 C266 531 323 382 430 382 C537 382 596 530 555 701"/>
+              </defs>
+              <g class="finger-ridges">
+                <path pathLength="1" d="M122 557 C122 300 260 96 430 96 C601 96 739 300 739 557"/>
+                <path pathLength="1" d="M155 596 C133 375 257 165 430 165 C604 165 728 373 705 596"/>
+                <path pathLength="1" d="M194 632 C166 432 271 237 430 237 C589 237 694 431 665 632"/>
+                <path pathLength="1" d="M238 668 C204 490 292 308 430 308 C568 308 655 489 621 668"/>
+                <path pathLength="1" d="M306 701 C266 531 323 382 430 382 C537 382 596 530 555 701"/>
+                <path pathLength="1" d="M365 716 C337 601 365 468 430 468 C496 468 523 601 495 716"/>
+                <path pathLength="1" d="M122 557 C129 783 235 923 390 954"/>
+                <path pathLength="1" d="M155 596 C179 782 273 888 410 909"/>
+                <path pathLength="1" d="M194 632 C228 779 305 853 426 865"/>
+                <path pathLength="1" d="M238 668 C277 775 338 825 430 827"/>
+                <path pathLength="1" d="M306 701 C337 768 377 791 430 791 C491 791 532 757 555 701"/>
+                <path pathLength="1" d="M665 632 C681 764 624 885 526 937"/>
+              </g>
+              <rect class="finger-tracer" width="14" height="14" rx="2" fill="#00AFF0" transform="rotate(45)"><animateMotion dur="6.4s" repeatCount="indefinite" rotate="auto"><mpath href="#fingerTraceA"/></animateMotion></rect>
+              <rect class="finger-tracer warm" width="11" height="11" rx="2" fill="#FF0000" transform="rotate(45)"><animateMotion dur="4.8s" begin="-1.5s" repeatCount="indefinite" rotate="auto"><mpath href="#fingerTraceB"/></animateMotion></rect>
+            </svg>
+            <div class="fingerprint-scan" aria-hidden="true"></div>
+            <div class="fingerprint-copy"><small>PENILAIAN MANUSIA</small><strong>Tetap menentukan.</strong></div>
+            <div class="fingerprint-index">IDENTITAS · TUJUAN · TANGGUNG JAWAB</div>
+          </div>
+          <div class="finale-no">17 / 17</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- === GLOBAL CONTROLS === -->
+  <nav class="deck-controls controls" aria-label="Kontrol presentasi"><button id="prevBtn" aria-label="Slide sebelumnya">←</button><span class="counter" id="counter">01 / 17</span><button id="nextBtn" aria-label="Slide berikutnya">→</button><button id="helpBtn" aria-label="Bantuan keyboard">?</button></nav>
+  <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- === INLINE EDITING UI === -->
+  <div class="edit-hotzone" aria-hidden="true"></div><button class="edit-toggle" id="editToggle" title="Mode edit (E)" aria-label="Aktifkan mode edit">✎</button><div class="toast" id="toast"></div>
+
+  <!-- === KEYBOARD HELP === -->
+  <aside class="help" id="helpOverlay" aria-hidden="true"><div class="help-card"><h2>Navigasi presentasi</h2><dl><dt>← / → / Space</dt><dd>Pindah slide</dd><dt>Swipe / Wheel</dt><dd>Navigasi sentuh atau mouse</dd><dt>E</dt><dd>Aktifkan edit teks langsung</dd><dt>Ctrl/Cmd + S</dt><dd>Simpan perubahan dan unduh HTML</dd><dt>?</dt><dd>Buka atau tutup bantuan</dd></dl><button id="closeHelp">Tutup</button></div></aside>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       Fixed-stage scaling, navigation, touch, wheel, and URL state.
+       =========================================== */
+    class SlidePresentation {
+      constructor() {
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.stage = document.getElementById('deckStage');
+        this.currentSlide = Math.max(0, Math.min(Number(new URLSearchParams(location.search).get('slide') || 1) - 1, this.slides.length - 1));
+        this.touchStartX = 0;
+        this.wheelLocked = false;
+        this.reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this.setupStageScale(); this.setupNavigation(); this.setupPointerEffects(); this.setupInteractiveCards(); this.setupCounters(); this.showSlide(this.currentSlide, false);
+      }
+      setupStageScale() {
+        const scale = () => { const factor = Math.min(innerWidth / 1920, innerHeight / 1080); const x = (innerWidth - 1920 * factor) / 2; const y = (innerHeight - 1080 * factor) / 2; this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`; this.scaleFactor = factor; };
+        scale(); addEventListener('resize', scale);
+      }
+      setupNavigation() {
+        document.getElementById('prevBtn').addEventListener('click', () => this.prev()); document.getElementById('nextBtn').addEventListener('click', () => this.next());
+        addEventListener('keydown', e => { if (document.body.dataset.editing === 'true' && e.target.isContentEditable) return; if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)) { e.preventDefault(); this.next(); } if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); this.prev(); } if (e.key === 'Home') this.showSlide(0); if (e.key === 'End') this.showSlide(this.slides.length - 1); });
+        addEventListener('wheel', e => { if (this.wheelLocked || Math.abs(e.deltaY) < 25) return; this.wheelLocked = true; e.deltaY > 0 ? this.next() : this.prev(); setTimeout(() => this.wheelLocked = false, 700); }, { passive: true });
+        addEventListener('touchstart', e => this.touchStartX = e.changedTouches[0].screenX, { passive: true }); addEventListener('touchend', e => { const d = e.changedTouches[0].screenX - this.touchStartX; if (Math.abs(d) > 55) d < 0 ? this.next() : this.prev(); }, { passive: true });
+      }
+      setupPointerEffects() {
+        const spot = document.createElement('div'); spot.className = 'spotlight'; this.stage.appendChild(spot);
+        this.stage.addEventListener('pointermove', e => { const rect = this.stage.getBoundingClientRect(); const x = (e.clientX - rect.left) / this.scaleFactor; const y = (e.clientY - rect.top) / this.scaleFactor; spot.style.left = `${x}px`; spot.style.top = `${y}px`; const active = this.slides[this.currentSlide]; active.style.setProperty('--mx', `${x / 19.2}%`); active.style.setProperty('--my', `${y / 10.8}%`); active.querySelectorAll('.parallax').forEach(el => { const depth = Number(el.dataset.depth || 12); el.style.transform = `translate(${(x - 960) / 960 * depth}px, ${(y - 540) / 540 * depth}px)`; }); });
+      }
+      setupInteractiveCards() { if (this.reducedMotion) return; document.querySelectorAll('.interactive-card').forEach(card => { card.addEventListener('pointermove', e => { const r = card.getBoundingClientRect(), x = (e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5; card.style.transform=`perspective(900px) rotateY(${x*4}deg) rotateX(${-y*4}deg) translateY(-4px)`; }); card.addEventListener('pointerleave',()=>card.style.transform=''); }); }
+      setupCounters() { this.observer = new MutationObserver(() => this.animateCounters()); this.slides.forEach(s => this.observer.observe(s,{attributes:true,attributeFilter:['class']})); }
+      animateCounters() { const active=this.slides[this.currentSlide]; active.querySelectorAll('.count').forEach(el=>{const goal=Number(el.dataset.value),suffix=el.dataset.suffix||'',start=performance.now(),dur=850; const tick=t=>{const p=Math.min(1,(t-start)/dur);el.textContent=Math.round(goal*(1-Math.pow(1-p,3)))+suffix;if(p<1)requestAnimationFrame(tick)};requestAnimationFrame(tick)}); }
+      showSlide(index, updateHistory = true) { this.currentSlide=Math.max(0,Math.min(index,this.slides.length-1)); this.slides.forEach((s,i)=>{s.classList.toggle('active',i===this.currentSlide);s.classList.toggle('visible',i===this.currentSlide)}); document.getElementById('counter').textContent=`${String(this.currentSlide+1).padStart(2,'0')} / ${this.slides.length}`; document.getElementById('progressFill').style.width=`${((this.currentSlide+1)/this.slides.length)*100}%`; document.title=`${this.slides[this.currentSlide].dataset.title} — AI at Work`; if(updateHistory) history.replaceState(null,'',`?slide=${this.currentSlide+1}`); this.animateCounters(); }
+      next(){this.showSlide(this.currentSlide+1)} prev(){this.showSlide(this.currentSlide-1)}
+    }
+
+    /* ===========================================
+       INLINE EDITOR
+       Local autosave plus Ctrl/Cmd+S HTML download.
+       =========================================== */
+    class InlineEditor {
+      constructor(){this.isActive=false;this.fields=[...document.querySelectorAll('.editable')];this.restore();this.fields.forEach((el,i)=>el.addEventListener('input',()=>localStorage.setItem(`ai-work-field-${i}`,el.innerHTML)));}
+      restore(){this.fields.forEach((el,i)=>{const saved=localStorage.getItem(`ai-work-field-${i}`);if(saved!==null)el.innerHTML=saved;});}
+      toggleEditMode(){this.isActive=!this.isActive;document.body.dataset.editing=String(this.isActive);this.fields.forEach(el=>el.contentEditable=String(this.isActive));editToggle.classList.toggle('active',this.isActive);editToggle.classList.toggle('show',this.isActive);showToast(this.isActive?'Mode edit aktif — klik teks untuk mengubah':'Perubahan tersimpan di browser');}
+      download(){const clone=document.documentElement.cloneNode(true);clone.querySelectorAll('[contenteditable]').forEach(el=>el.removeAttribute('contenteditable'));const blob=new Blob(['<!doctype html>\n'+clone.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ai-at-work-edited.html';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);showToast('HTML hasil edit diunduh');}
+    }
+
+    /* ===========================================
+       SLIDE-SPECIFIC INTERACTIONS
+       =========================================== */
+    const presentation = new SlidePresentation();
+    const editor = new InlineEditor();
+    const editToggle=document.getElementById('editToggle'),hotzone=document.querySelector('.edit-hotzone');let hideTimeout;
+    const showToast=message=>{const t=document.getElementById('toast');t.textContent=message;t.classList.add('show');clearTimeout(t.timer);t.timer=setTimeout(()=>t.classList.remove('show'),2200)};
+    editToggle.addEventListener('click',()=>editor.toggleEditMode());hotzone.addEventListener('click',()=>editor.toggleEditMode());hotzone.addEventListener('mouseenter',()=>{clearTimeout(hideTimeout);editToggle.classList.add('show')});hotzone.addEventListener('mouseleave',()=>hideTimeout=setTimeout(()=>{if(!editor.isActive)editToggle.classList.remove('show')},400));editToggle.addEventListener('mouseenter',()=>clearTimeout(hideTimeout));editToggle.addEventListener('mouseleave',()=>hideTimeout=setTimeout(()=>{if(!editor.isActive)editToggle.classList.remove('show')},400));
+    addEventListener('keydown',e=>{if((e.key==='e'||e.key==='E')&&!e.target.isContentEditable)editor.toggleEditMode();if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='s'){e.preventDefault();editor.download();}});
+
+    const orbitCore=document.getElementById('orbitCore'),orbitCoreText=document.getElementById('orbitCoreText');
+    const orbitStates=['NILAI<br>+<br>KENDALI','PRODUKTIVITAS<br>+<br>KUALITAS','KAPASITAS<br>+<br>TANGGUNG JAWAB'];let orbitState=0;
+    orbitCore.addEventListener('click',()=>{orbitState=(orbitState+1)%orbitStates.length;orbitCoreText.innerHTML=orbitStates[orbitState];orbitCore.animate([{transform:'scale(.92)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.16,1,.3,1)'});});
+    const policyTitle=document.getElementById('policyTitle'),policyDetail=document.getElementById('policyDetail');
+    document.querySelectorAll('.policy-node').forEach(node=>{const activate=()=>{document.querySelectorAll('.policy-node').forEach(n=>n.classList.remove('active'));node.classList.add('active');policyTitle.textContent=node.dataset.policyTitle;policyDetail.textContent=node.dataset.policyDetail;};node.addEventListener('mouseenter',activate);node.addEventListener('focus',activate);node.addEventListener('click',activate);});
+    document.getElementById('verifyClaim').addEventListener('click',()=>{document.getElementById('reportSheet').classList.toggle('verified');document.getElementById('verifyClaim').textContent=document.getElementById('reportSheet').classList.contains('verified')?'Hasil: klaim tidak didukung':'Periksa klaim 18%';});
+
+    /* ===========================================
+       HELP OVERLAY
+       =========================================== */
+    const help=document.getElementById('helpOverlay');const toggleHelp=()=>{help.classList.toggle('show');help.setAttribute('aria-hidden',String(!help.classList.contains('show')))};document.getElementById('helpBtn').addEventListener('click',toggleHelp);document.getElementById('closeHelp').addEventListener('click',toggleHelp);addEventListener('keydown',e=>{if(e.key==='?'&&!e.target.isContentEditable)toggleHelp();if(e.key==='Escape'&&help.classList.contains('show'))toggleHelp();});
+  </script>
+</body>
+</html>
