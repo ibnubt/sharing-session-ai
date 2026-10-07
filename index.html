@@ -478,7 +478,7 @@
     .evo-step h3{margin-top:16px;font:400 27px/1 var(--font-display)}
     .evo-step p{margin-top:9px;font-size:18px;color:var(--muted)}
     .es1{left:24px;top:438px}.es2{left:399px;top:338px}.es3{left:799px;top:256px}.es4{left:1209px;top:158px}.es5{right:0;top:46px;text-align:right}.es5 .evo-node{background:var(--pln-teal);box-shadow:0 0 0 14px rgba(0,162,185,.12),0 16px 42px rgba(3,91,113,.18)}
-    .evolution-axis{position:absolute;left:170px;right:170px;bottom:9px;display:flex;justify-content:space-between;border-top:1px solid rgba(3,91,113,.2);padding-top:13px;font:600 13px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}
+    .evolution-axis{position:absolute;left:170px;right:170px;bottom:-40px;display:flex;justify-content:space-between;border-top:1px solid rgba(3,91,113,.2);padding-top:13px;font:600 13px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}
 
     /* Slide 03 — separate evidence, explicit readiness gap */
     .evidence-board{display:grid;grid-template-columns:760px 1fr;gap:74px;height:650px;margin-top:24px;align-items:center}
@@ -489,7 +489,7 @@
     .signal-ring::before{content:'';position:absolute;inset:13px;border-radius:50%;background:#f8fcfd}
     .signal-ring span{position:relative;z-index:1}
     .survey-signal h3{font:600 14px/1 var(--font-mono);letter-spacing:.14em;color:var(--pln-teal)}
-    .survey-signal p{margin-top:10px;font-size:21px;line-height:1.35;color:var(--muted)}
+    .survey-signal p{margin-top:10px;font-size:18px;line-height:1.38;color:var(--muted)}
     .readiness-gap{position:relative;padding:24px 0 0 28px;border-left:2px solid rgba(3,91,113,.13)}
     .gap-eyebrow{font:600 14px/1 var(--font-mono);letter-spacing:.15em;color:var(--pln-red)}
     .readiness-gap h3{margin-top:16px;font:400 42px/1.04 var(--font-display);color:var(--pln-deep)}
@@ -499,6 +499,7 @@
     .bar-track{height:22px;margin-top:12px;border-radius:999px;background:rgba(3,91,113,.1);overflow:hidden}.bar-track i{display:block;width:var(--w);height:100%;border-radius:999px;background:linear-gradient(90deg,var(--pln-cyan),var(--pln-teal));animation:countbar 1.2s var(--ease)}.mature .bar-track i{background:var(--pln-red)}.mature .comparison-label strong{color:var(--pln-red)}
     .gap-number{display:flex;align-items:baseline;gap:20px;margin-top:38px;color:var(--pln-deep)}.gap-number strong{font:400 62px/.9 var(--font-display)}.gap-number span{font-size:21px;color:var(--muted)}
     .chart-note{margin-top:24px;padding-top:18px;border-top:1px solid rgba(3,91,113,.13);font:500 14px/1.4 var(--font-mono);color:var(--muted)}
+    .day-takeaway{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);width:1280px;padding-top:16px;border-top:1px solid rgba(3,91,113,.16);text-align:center;font-size:19px;line-height:1.35;color:var(--muted)}.day-takeaway b{color:var(--pln-deep)}
 
     /* Slide 06 — mathematically correct capacity allocation */
     .capacity-economics{display:grid;grid-template-columns:560px 1fr;gap:70px;height:650px;margin-top:30px;align-items:center}
@@ -546,9 +547,8 @@
     .policy-wheel{position:relative;height:630px;margin-top:10px}
     .policy-orbit{position:absolute;inset:0;width:100%;height:610px;overflow:visible}.policy-orbit ellipse{fill:none;stroke:rgba(3,91,113,.14);stroke-width:14}.policy-orbit .policy-trace{stroke:var(--pln-teal);stroke-width:4;stroke-dasharray:32 22;animation:march 2.7s linear infinite}
     .policy-core{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:470px;height:280px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;padding:42px;background:var(--pln-deep);color:white;box-shadow:0 25px 70px rgba(3,91,113,.22)}.policy-core>span{font:600 13px/1 var(--font-mono);letter-spacing:.15em;color:#9beafa}.policy-core strong{margin-top:17px;font:400 31px/1.12 var(--font-display)}.policy-core p{margin-top:17px;max-width:350px;font-size:16px;line-height:1.35;color:#c8ebf0}
-    .policy-node{position:absolute;width:152px;height:152px;border-radius:50%;border:3px solid var(--pln-teal);display:grid;place-items:center;align-content:center;background:#f8fcfd;color:var(--pln-deep);cursor:pointer;box-shadow:0 16px 42px rgba(3,91,113,.13);transition:.28s var(--ease);z-index:2}.policy-node span{font:600 12px/1 var(--font-mono);color:var(--pln-teal)}.policy-node strong{margin-top:10px;font:600 14px/1.1 var(--font-mono);letter-spacing:.05em}.policy-node:hover,.policy-node:focus-visible,.policy-node.active{transform:scale(1.1);background:var(--pln-teal);color:white;outline:0;box-shadow:0 0 0 14px rgba(0,162,185,.12)}.policy-node:hover span,.policy-node:focus-visible span,.policy-node.active span{color:white}
+    .policy-node{position:absolute;width:168px;height:168px;border-radius:50%;border:3px solid var(--pln-teal);display:grid;place-items:center;align-content:center;text-align:center;padding:20px;background:#f8fcfd;color:var(--pln-deep);box-shadow:0 16px 42px rgba(3,91,113,.13);z-index:2}.policy-node span{font:600 12px/1 var(--font-mono);color:var(--pln-teal)}.policy-node strong{margin-top:9px;font:600 14px/1.1 var(--font-mono);letter-spacing:.04em}.policy-node small{display:block;margin-top:9px;max-width:126px;font:500 11px/1.25 var(--font-body);color:var(--muted)}
     .pn1{left:166px;top:48px}.pn2{left:305px;top:400px}.pn3{left:796px;top:470px}.pn4{right:305px;top:400px}.pn5{right:166px;top:48px}
-    .policy-hint{position:absolute;left:50%;bottom:0;transform:translateX(-50%);font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--muted)}
 
     /* Slide 15 — regulation mapped directly to work flow */
     .regulatory-flow{position:relative;display:grid;grid-template-columns:1fr 130px 1fr 130px 1fr;gap:10px;align-items:start;height:650px;margin-top:20px;padding:20px 22px 0}
@@ -603,7 +603,7 @@
     /* Slide 05: every question has a real connection to the center */
     .agenda-star{position:relative;width:1580px;height:650px;margin:8px auto 0}
     .agenda-links{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.agenda-links path{fill:none;stroke:rgba(0,162,185,.42);stroke-width:4;stroke-linecap:round;stroke-dasharray:14 12;animation:march 3s linear infinite}
-    .agenda-center{position:absolute;left:600px;top:205px;width:380px;height:220px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;background:var(--pln-deep);color:white;box-shadow:0 24px 70px rgba(3,91,113,.22);z-index:2}.agenda-center small{font:600 11px/1 var(--font-mono);letter-spacing:.14em;color:#a9edf5}.agenda-center strong{margin-top:15px;font:400 35px/1.08 var(--font-display)}
+    .agenda-center{position:absolute;left:600px;top:190px;width:380px;height:250px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;padding:34px;background:var(--pln-deep);color:white;box-shadow:0 24px 70px rgba(3,91,113,.22);z-index:2}.agenda-center small{font:600 11px/1 var(--font-mono);letter-spacing:.14em;color:#a9edf5}.agenda-center strong{margin-top:15px;font:400 31px/1.08 var(--font-display)}.agenda-center p{margin-top:14px;font-size:14px;line-height:1.35;color:#c6edf2}
     .agenda-question{position:absolute;min-height:110px;color:var(--pln-deep);z-index:3}.agenda-question h3{font:400 28px/1 var(--font-display)}.agenda-question p{margin-top:10px;font-size:18px;line-height:1.3;color:var(--muted)}.question-anchor{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--pln-cyan);border:6px solid #f8fcfd;box-shadow:0 0 0 9px rgba(0,175,240,.12)}
     .aq1{left:60px;top:82px;width:380px;padding-right:66px;text-align:right}.aq1 .question-anchor{right:-17px;top:36px}
     .aq2{left:1140px;top:82px;width:380px;padding-left:66px}.aq2 .question-anchor{left:-17px;top:36px}
@@ -631,13 +631,13 @@
     .routing-note{position:absolute;left:355px;bottom:1px;width:630px;text-align:center;font-size:18px;line-height:1.35;color:var(--muted)}.routing-note b{color:var(--pln-deep)}
 
     /* Slide 14: node centers now sit precisely on the ellipse */
-    .pn1{left:242px;top:148px}.pn2{left:344px;top:379px}.pn3{left:796px;top:463px}.pn4{right:344px;top:379px}.pn5{right:242px;top:148px}
+    .pn1{left:234px;top:140px}.pn2{left:336px;top:371px}.pn3{left:788px;top:455px}.pn4{right:336px;top:371px}.pn5{right:234px;top:140px}
 
     /* Slide 16: clean three-part feedback system */
     .feedback-system{position:relative;height:640px;margin-top:4px}
     .feedback-arrows{position:absolute;inset:0;width:100%;height:620px;overflow:visible}.feedback-arrows path{fill:none;stroke:rgba(0,162,185,.5);stroke-width:5;stroke-linecap:round;stroke-dasharray:18 14;animation:march 3.2s linear infinite}
     .feedback-node{position:absolute;top:160px;width:500px;height:330px;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;padding:64px;background:var(--soft-cyan);color:var(--pln-deep);box-shadow:inset 0 0 0 3px rgba(0,162,185,.14),0 20px 55px rgba(3,91,113,.08);z-index:2}.fn-direction{left:80px}.fn-evidence{right:80px;background:rgba(255,254,208,.68);box-shadow:inset 0 0 0 3px rgba(198,199,0,.16),0 20px 55px rgba(3,91,113,.08)}.fn-work{left:50%;top:175px;transform:translateX(-50%);width:300px;height:300px;padding:38px;background:var(--pln-deep);color:white;box-shadow:0 25px 70px rgba(3,91,113,.24);z-index:3}
-    .feedback-node>span{font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.fn-work>span{color:#a5edf5}.feedback-node h3{margin-top:17px;font:400 43px/.95 var(--font-display)}.fn-work h3{font-size:54px}.feedback-node p{margin-top:20px;max-width:360px;font-size:20px;line-height:1.45;color:var(--muted)}.fn-work p{color:#cef0f4;font-size:17px}
+    .feedback-node>span{font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.fn-work>span{color:#a5edf5}.feedback-node h3{margin-top:17px;font:400 43px/.95 var(--font-display)}.fn-work h3{font-size:46px}.feedback-node p{margin-top:20px;max-width:360px;font-size:20px;line-height:1.45;color:var(--muted)}.fn-work p{color:#cef0f4;font-size:17px}
     .feedback-return{position:absolute;left:50%;bottom:56px;transform:translateX(-50%);text-align:center;color:var(--pln-deep)}.feedback-return span{display:block;font:600 11px/1 var(--font-mono);letter-spacing:.13em;color:var(--pln-teal)}.feedback-return strong{display:block;margin-top:10px;font:400 21px/1 var(--font-display)}
     .feedback-principle{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:920px;padding-top:14px;border-top:1px solid rgba(3,91,113,.16);text-align:center;font-size:18px;color:var(--muted)}.feedback-principle b{color:var(--pln-deep)}
 
@@ -694,19 +694,19 @@
       <!-- === SLIDE 02: AI CAPABILITY EVOLUTION === -->
       <section class="slide" data-title="Perkembangan Kemampuan AI" aria-label="Slide 2: Perkembangan Kemampuan AI">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Perkembangan AI</div><h2 class="slide-title editable">AI berkembang dari mencari informasi<br>hingga <span class="accent">menjalankan tugas.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Perkembangan AI</div><h2 class="slide-title editable">Peran AI berkembang: dari menjawab pertanyaan<br>hingga <span class="accent">menjalankan beberapa langkah kerja.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="evolution-field reveal d1">
             <svg class="evolution-path" viewBox="0 0 1720 610" aria-hidden="true">
               <path class="evolution-shadow" d="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/>
               <path class="evolution-dash" d="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/>
               <circle r="11" fill="#00A2B9"><animateMotion dur="5.5s" repeatCount="indefinite" path="M75 500 C260 500 290 400 450 400 S700 318 850 318 S1110 220 1260 220 S1470 108 1640 108"/></circle>
             </svg>
-            <article class="evo-step es1"><button class="evo-node" type="button">01</button><h3>Search</h3><p>Mencari informasi</p></article>
-            <article class="evo-step es2"><button class="evo-node" type="button">02</button><h3>Predictive AI</h3><p>Membuat prediksi</p></article>
-            <article class="evo-step es3"><button class="evo-node" type="button">03</button><h3>Generative AI</h3><p>Membuat konten</p></article>
-            <article class="evo-step es4"><button class="evo-node" type="button">04</button><h3>AI Assistant</h3><p>Mendampingi manusia</p></article>
-            <article class="evo-step es5"><button class="evo-node" type="button">05</button><h3>AI Agent</h3><p>Mengerjakan tugas mandiri</p></article>
-            <div class="evolution-axis"><span>INFORMASI</span><span>KREASI</span><span>EKSEKUSI</span></div>
+            <article class="evo-step es1"><button class="evo-node" type="button">01</button><h3>Search</h3><p>Menemukan jawaban dari sumber.</p></article>
+            <article class="evo-step es2"><button class="evo-node" type="button">02</button><h3>Predictive AI</h3><p>Memperkirakan apa yang mungkin terjadi.</p></article>
+            <article class="evo-step es3"><button class="evo-node" type="button">03</button><h3>Generative AI</h3><p>Membuat draf teks, gambar, atau kode.</p></article>
+            <article class="evo-step es4"><button class="evo-node" type="button">04</button><h3>AI Assistant</h3><p>Membantu satu tugas sesuai instruksi.</p></article>
+            <article class="evo-step es5"><button class="evo-node" type="button">05</button><h3>AI Agent</h3><p>Menjalankan beberapa langkah menuju tujuan.</p></article>
+            <div class="evolution-axis"><span>MANUSIA BERTANYA</span><span>AI MEMBANTU</span><span>AI BERTINDAK</span></div>
           </div>
           <div class="slide-no">02 / 17</div>
         </div>
@@ -718,34 +718,35 @@
           <header class="slide-head"><div><div class="kicker">Adopsi di Perusahaan</div><h2 class="slide-title editable">Penggunaan AI tumbuh cepat.<br><span class="accent">Aturan dan pengawasannya belum mengikuti.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="evidence-board">
             <div class="survey-signals reveal">
-              <article class="survey-signal"><div class="signal-ring" style="--p:60"><span class="count" data-value="60" data-suffix="%">0%</span></div><div><h3>AKSES</h3><p class="editable">Pekerja memiliki akses ke alat AI resmi perusahaan.</p></div></article>
-              <article class="survey-signal"><div class="signal-ring" style="--p:66"><span class="count" data-value="66" data-suffix="%">0%</span></div><div><h3>PRODUKTIVITAS</h3><p class="editable">Perusahaan melihat peningkatan produktivitas dan efisiensi.</p></div></article>
-              <article class="survey-signal"><div class="signal-ring" style="--p:25"><span class="count" data-value="25" data-suffix="%">0%</span></div><div><h3>DAMPAK BESAR</h3><p class="editable">Dampak besar dirasakan 25% perusahaan—naik dari 12%.</p></div></article>
+              <article class="survey-signal"><div class="signal-ring" style="--p:60"><span class="count" data-value="60" data-suffix="%">0%</span></div><div><h3>AKSES PEKERJA</h3><p class="editable">Sekitar 60% pekerja di organisasi responden memiliki akses ke alat AI yang disetujui organisasinya—bukan satu merek tertentu.</p></div></article>
+              <article class="survey-signal"><div class="signal-ring" style="--p:66"><span class="count" data-value="66" data-suffix="%">0%</span></div><div><h3>MANFAAT ORGANISASI</h3><p class="editable">66% organisasi responden melaporkan peningkatan produktivitas atau efisiensi setelah menggunakan AI.</p></div></article>
+              <article class="survey-signal"><div class="signal-ring" style="--p:25"><span class="count" data-value="25" data-suffix="%">0%</span></div><div><h3>DAMPAK TRANSFORMATIF</h3><p class="editable">25% pemimpin menilai AI sudah mengubah bisnis secara mendasar—naik dari 12% setahun sebelumnya.</p></div></article>
             </div>
             <div class="readiness-gap reveal d2">
               <div class="gap-eyebrow">KESIAPAN AI AGENT</div>
-              <h3>Rencana adopsi tinggi.<br><span>Aturan dan pengawasan belum siap.</span></h3>
-              <div class="comparison-bar"><div class="comparison-label"><span>Rencana adopsi dalam 2 tahun</span><strong>74%</strong></div><div class="bar-track"><i style="--w:74%"></i></div></div>
-              <div class="comparison-bar mature"><div class="comparison-label"><span>Aturan AI agent yang sudah matang</span><strong>21%</strong></div><div class="bar-track"><i style="--w:21%"></i></div></div>
+              <h3>Penggunaan agent akan meningkat.<br><span>Kesiapan pengawasannya tertinggal.</span></h3>
+              <div class="comparison-bar"><div class="comparison-label"><span>Akan memakai AI agent setidaknya secara moderat dalam 2 tahun</span><strong>74%</strong></div><div class="bar-track"><i style="--w:74%"></i></div></div>
+              <div class="comparison-bar mature"><div class="comparison-label"><span>Sudah memiliki tata kelola AI agent yang matang</span><strong>21%</strong></div><div class="bar-track"><i style="--w:21%"></i></div></div>
               <div class="gap-number"><strong class="count" data-value="53" data-suffix=" POIN">0</strong><span>selisih antara rencana dan kesiapan</span></div>
-              <p class="chart-note">Empat temuan survei yang berbeda—bukan satu rangkaian waktu.</p>
+              <p class="chart-note">Semua angka berasal dari survei yang sama, tetapi mengukur hal berbeda: akses pekerja, manfaat organisasi, dampak bisnis, dan kesiapan AI agent.</p>
             </div>
           </div>
-          <div class="source editable">Sumber: Deloitte, State of AI in the Enterprise 2026 — survei 3.235 pemimpin bisnis dan TI di 24 negara (Agustus–September 2025).</div><div class="slide-no">03 / 17</div>
+          <div class="source editable">Sumber: Deloitte, State of AI in the Enterprise 2026 — survei 3.235 pemimpin bisnis dan TI yang terlibat langsung dalam program AI di 24 negara (Agustus–September 2025).</div><div class="slide-no">03 / 17</div>
         </div>
       </section>
 
       <!-- === SLIDE 04: DAILY WORKFLOW === -->
       <section class="slide" data-title="AI dalam Pekerjaan Sehari-hari" aria-label="Slide 4: AI dalam Pekerjaan Sehari-hari">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Pekerjaan Sehari-hari</div><h2 class="slide-title editable">AI membantu menyiapkan pekerjaan.<br>Manusia tetap <span class="accent">menilai hasilnya.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Pekerjaan Sehari-hari</div><h2 class="slide-title editable">AI membantu di lima tahap pekerjaan.<br>Manusia tetap <span class="accent">memeriksa dan memutuskan.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="dayflow">
             <div class="day-line"></div><div class="day-token"></div>
-            <article class="day-step ds1 reveal"><h3>Informasi</h3><p class="editable">Merangkum laporan, email, dan dokumen.</p></article><span class="time-label t1">08:00</span>
-            <article class="day-step ds2 reveal d1"><h3>Komunikasi</h3><p class="editable">Menyusun proposal, presentasi, dan tanggapan.</p></article><span class="time-label t2">09:30</span>
-            <article class="day-step ds3 reveal d2"><h3>Analisis</h3><p class="editable">Membandingkan data, pilihan, dan risiko.</p></article><span class="time-label t3">11:00</span>
-            <article class="day-step ds4 reveal d3"><h3>Persiapan</h3><p class="editable">Menyiapkan rapat, laporan, dan keputusan.</p></article><span class="time-label t4">14:00</span>
-            <article class="day-step ds5 reveal d4"><h3>Pelaksanaan</h3><p class="editable">Mengubah file dan menjalankan alur kerja.</p></article><span class="time-label t5">16:30</span>
+            <article class="day-step ds1 reveal"><h3>Memahami</h3><p class="editable">AI merangkum laporan, email, dan dokumen.</p></article><span class="time-label t1">TAHAP 1</span>
+            <article class="day-step ds2 reveal d1"><h3>Menyusun</h3><p class="editable">AI menyiapkan draf proposal, presentasi, atau tanggapan.</p></article><span class="time-label t2">TAHAP 2</span>
+            <article class="day-step ds3 reveal d2"><h3>Membandingkan</h3><p class="editable">AI membantu melihat pilihan, pola, dan risiko.</p></article><span class="time-label t3">TAHAP 3</span>
+            <article class="day-step ds4 reveal d3"><h3>Menyiapkan</h3><p class="editable">AI merapikan bahan rapat dan alternatif keputusan.</p></article><span class="time-label t4">TAHAP 4</span>
+            <article class="day-step ds5 reveal d4"><h3>Menindaklanjuti</h3><p class="editable">AI membantu mengubah berkas atau menjalankan tugas rutin.</p></article><span class="time-label t5">TAHAP 5</span>
+            <div class="day-takeaway editable"><b>Alurnya:</b> AI menyiapkan bahan → manusia memberi konteks, memeriksa, dan memutuskan.</div>
           </div><div class="slide-no">04 / 17</div>
         </div>
       </section>
@@ -753,17 +754,17 @@
       <!-- === SLIDE 05: MANAGEMENT AGENDA === -->
       <section class="slide" data-title="Agenda Manajemen" aria-label="Slide 5: Agenda Manajemen">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Lima Pertanyaan</div><h2 class="slide-title editable">AI perlu dikelola sebagai agenda bisnis,<br>bukan hanya sebagai <span class="accent">urusan teknologi.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Lima Keputusan Manajemen</div><h2 class="slide-title editable">Lima jawaban ini menentukan apakah AI<br><span class="accent">menghasilkan nilai atau menambah risiko.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="agenda-star reveal d1">
             <svg class="agenda-links" viewBox="0 0 1580 650" aria-hidden="true">
               <path d="M790 315 L440 135"/><path d="M790 315 L1140 135"/><path d="M790 315 L1240 410"/><path d="M790 315 L340 410"/><path d="M790 315 L790 515"/>
             </svg>
-            <div class="agenda-center"><small>LIMA PERTANYAAN</small><strong>YANG PERLU<br>DIJAWAB</strong></div>
-            <article class="agenda-question aq1"><span class="question-anchor"></span><div><h3>Produktivitas</h3><p class="editable">Berapa banyak waktu yang bisa dihemat?</p></div></article>
+            <div class="agenda-center"><small>HASIL AKHIR</small><strong>DASAR KEPUTUSAN<br>MANAJEMEN</strong><p>Menentukan prioritas, proses kerja, pelatihan, dan kebijakan.</p></div>
+            <article class="agenda-question aq1"><span class="question-anchor"></span><div><h3>Produktivitas</h3><p class="editable">Pekerjaan apa yang harus menjadi lebih cepat?</p></div></article>
             <article class="agenda-question aq2"><span class="question-anchor"></span><div><h3>Kapasitas</h3><p class="editable">Waktu yang dihemat akan digunakan untuk apa?</p></div></article>
-            <article class="agenda-question aq3"><span class="question-anchor"></span><div><h3>Kualitas</h3><p class="editable">Bagaimana memastikan hasil AI benar?</p></div></article>
-            <article class="agenda-question aq4"><span class="question-anchor"></span><div><h3>Tenaga Kerja</h3><p class="editable">Bagaimana tugas dan keterampilan berubah?</p></div></article>
-            <article class="agenda-question aq5"><span class="question-anchor"></span><div><h3>Kendali</h3><p class="editable">Data apa yang boleh diakses, dan tindakan apa yang boleh dilakukan AI?</p></div></article>
+            <article class="agenda-question aq3"><span class="question-anchor"></span><div><h3>Kualitas</h3><p class="editable">Bagaimana hasil AI akan diperiksa?</p></div></article>
+            <article class="agenda-question aq4"><span class="question-anchor"></span><div><h3>Tenaga Kerja</h3><p class="editable">Tugas dan keterampilan apa yang berubah?</p></div></article>
+            <article class="agenda-question aq5"><span class="question-anchor"></span><div><h3>Kendali</h3><p class="editable">Data dan tindakan apa yang harus dibatasi?</p></div></article>
           </div><div class="slide-no">05 / 17</div>
         </div>
       </section>
@@ -893,16 +894,15 @@
       <!-- === SLIDE 14: AI USAGE POLICY === -->
       <section class="slide" data-title="AI Usage Policy" aria-label="Slide 14: AI Usage Policy">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Batas Penggunaan</div><h2 class="slide-title editable">Kebijakan yang jelas membuat penggunaan AI<br><span class="accent">lebih aman dan produktif.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Batas Penggunaan</div><h2 class="slide-title editable">Sebelum AI digunakan, tetapkan<br><span class="accent">lima batas yang dipahami semua orang.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="policy-wheel reveal">
             <svg class="policy-orbit" viewBox="0 0 1744 610" aria-hidden="true"><ellipse cx="872" cy="304" rx="590" ry="235"/><ellipse class="policy-trace" cx="872" cy="304" rx="590" ry="235"/></svg>
-            <div class="policy-core"><span>PENGGUNAAN AI YANG AMAN</span><strong id="policyTitle">Lima hal yang<br>harus ditetapkan.</strong><p id="policyDetail">Klik setiap titik untuk melihat pertanyaannya.</p></div>
-            <button class="policy-node pn1" type="button" data-policy-title="APLIKASI" data-policy-detail="Aplikasi apa yang disetujui perusahaan?"><span>01</span><strong>APLIKASI</strong></button>
-            <button class="policy-node pn2" type="button" data-policy-title="DATA" data-policy-detail="Informasi apa yang boleh diproses?"><span>02</span><strong>DATA</strong></button>
-            <button class="policy-node pn3" type="button" data-policy-title="HASIL" data-policy-detail="Kapan hasil wajib diverifikasi?"><span>03</span><strong>HASIL</strong></button>
-            <button class="policy-node pn4" type="button" data-policy-title="TINDAKAN" data-policy-detail="Tindakan apa yang perlu persetujuan?"><span>04</span><strong>TINDAKAN</strong></button>
-            <button class="policy-node pn5" type="button" data-policy-title="TANGGUNG JAWAB" data-policy-detail="Siapa yang bertanggung jawab atas hasilnya?"><span>05</span><strong>TANGGUNG<br>JAWAB</strong></button>
-            <div class="policy-hint">ARAHKAN POINTER ATAU KLIK SETIAP TITIK</div>
+            <div class="policy-core"><span>SEBELUM AI DIGUNAKAN</span><strong>Tetapkan lima<br>batas ini.</strong><p>Batas yang jelas menentukan apa yang boleh, apa yang wajib diperiksa, dan siapa yang bertanggung jawab.</p></div>
+            <div class="policy-node pn1"><span>01</span><strong>APLIKASI</strong><small>Apa yang boleh dipakai?</small></div>
+            <div class="policy-node pn2"><span>02</span><strong>DATA</strong><small>Apa yang boleh diproses?</small></div>
+            <div class="policy-node pn3"><span>03</span><strong>HASIL</strong><small>Kapan wajib diperiksa?</small></div>
+            <div class="policy-node pn4"><span>04</span><strong>TINDAKAN</strong><small>Apa yang perlu persetujuan?</small></div>
+            <div class="policy-node pn5"><span>05</span><strong>TANGGUNG<br>JAWAB</strong><small>Siapa pemilik risikonya?</small></div>
           </div><div class="slide-no">14 / 17</div>
         </div>
       </section>
@@ -910,13 +910,13 @@
       <!-- === SLIDE 15: INDONESIAN REGULATORY CONTEXT === -->
       <section class="slide" data-title="Konteks Regulasi Indonesia" aria-label="Slide 15: Konteks Regulasi Indonesia">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Konteks Indonesia</div><h2 class="slide-title editable">Kepatuhan AI dimulai dari<br><span class="accent">data, sistem, dan cara penggunaannya.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Konteks Indonesia</div><h2 class="slide-title editable">Untuk patuh, periksa tiga hal:<br><span class="accent">data, sistem, dan penggunaan AI.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="regulatory-flow">
-            <article class="reg-stage data-stage reveal"><div class="reg-number">01</div><div class="reg-blob"><small>MASUKAN</small><h3>DATA</h3><p class="editable">Tujuan penggunaan · keamanan · hak pemilik data</p></div><strong>UU 27/2022 · PDP</strong></article>
+            <article class="reg-stage data-stage reveal"><div class="reg-number">01</div><div class="reg-blob"><small>SEBELUM DIPROSES</small><h3>DATA</h3><p class="editable">Boleh digunakan? Aman? Hak pemiliknya terjaga?</p></div><strong>UU 27/2022 · PDP</strong></article>
             <div class="reg-arrow"><span>→</span><small>DIPROSES</small></div>
-            <article class="reg-stage system-stage reveal d1"><div class="reg-number">02</div><div class="reg-blob"><small>PROSES</small><h3>SISTEM</h3><p class="editable">Andal · aman · dapat dipertanggungjawabkan</p></div><strong>PP 71/2019 · PSTE</strong></article>
+            <article class="reg-stage system-stage reveal d1"><div class="reg-number">02</div><div class="reg-blob"><small>SAAT DIPROSES</small><h3>SISTEM</h3><p class="editable">Andal? Aman? Ada pihak yang bertanggung jawab?</p></div><strong>PP 71/2019 · PSTE</strong></article>
             <div class="reg-arrow"><span>→</span><small>MENGHASILKAN</small></div>
-            <article class="reg-stage use-stage reveal d2"><div class="reg-number">03</div><div class="reg-blob"><small>HASIL + TINDAKAN</small><h3>PENGGUNAAN AI</h3><p class="editable">Terbuka · bertanggung jawab · menjaga privasi dan hak cipta</p></div><strong>SE MENKOMINFO 9/2023</strong></article>
+            <article class="reg-stage use-stage reveal d2"><div class="reg-number">03</div><div class="reg-blob"><small>HASIL + TINDAKAN</small><h3>PENGGUNAAN AI</h3><p class="editable">Terbuka? Bertanggung jawab? Privasi dan hak cipta terjaga?</p></div><strong>SE MENKOMINFO 9/2023</strong></article>
             <div class="ownership-rail"><span>PEMILIK PROSES</span><span>HUKUM</span><span>KEPATUHAN</span><span>KEAMANAN INFORMASI</span><b>TANGGUNG JAWAB LINTAS FUNGSI</b></div>
           </div><div class="source editable">Rujukan: UU No. 27/2022 (PDP); PP No. 71/2019 (PSTE); SE Menkominfo No. 9/2023 (Etika AI). Materi pengenalan—bukan pendapat hukum.</div><div class="slide-no">15 / 17</div>
         </div>
@@ -925,7 +925,7 @@
       <!-- === SLIDE 16: MANAGEMENT DECISIONS & METRICS === -->
       <section class="slide" data-title="Keputusan dan Ukuran Keberhasilan" aria-label="Slide 16: Keputusan dan Ukuran Keberhasilan">
         <div class="slide-shell">
-          <header class="slide-head"><div><div class="kicker">Ukur Hasilnya</div><h2 class="slide-title editable">Keberhasilan AI diukur dari hasil kerja,<br><span class="accent">bukan dari jumlah lisensi.</span></h2></div><div class="brand-text">AI at Work</div></header>
+          <header class="slide-head"><div><div class="kicker">Siklus Pengelolaan</div><h2 class="slide-title editable">Kelola AI sebagai siklus:<br><span class="accent">tetapkan, gunakan, ukur, lalu perbaiki.</span></h2></div><div class="brand-text">AI at Work</div></header>
           <div class="feedback-system reveal">
             <svg class="feedback-arrows" viewBox="0 0 1744 620" aria-hidden="true">
               <path id="forwardPath" d="M410 245 C610 70 1134 70 1334 245"/>
@@ -933,11 +933,11 @@
               <circle r="10" fill="#00AFF0"><animateMotion dur="4.5s" repeatCount="indefinite"><mpath href="#forwardPath"/></animateMotion></circle>
               <circle r="10" fill="#00A2B9"><animateMotion dur="4.5s" repeatCount="indefinite"><mpath href="#returnPath"/></animateMotion></circle>
             </svg>
-            <article class="feedback-node fn-direction"><span>01 · TETAPKAN ARAH</span><h3>Keputusan</h3><p class="editable">Tentukan siapa yang boleh memakai AI, untuk apa, dengan alat apa, dan di bawah aturan siapa.</p></article>
-            <article class="feedback-node fn-work"><span>02 · UBAH CARA KERJA</span><h3>AI dipakai</h3><p class="editable">AI digunakan dalam pekerjaan</p></article>
-            <article class="feedback-node fn-evidence"><span>03 · LIHAT HASIL</span><h3>Bukti hasil</h3><p class="editable">Waktu penyelesaian · jumlah pekerjaan · kualitas · penggunaan · insiden</p></article>
-            <div class="feedback-return"><span>04 · PELAJARI & SESUAIKAN</span><strong>Gunakan hasil untuk memperbaiki keputusan berikutnya</strong></div>
-            <div class="feedback-principle editable">Jumlah lisensi bukan ukuran keberhasilan. <b>Hasil, kualitas, dan keamanan</b> menunjukkan dampaknya.</div>
+            <article class="feedback-node fn-direction"><span>01 · TETAPKAN</span><h3>Arah</h3><p class="editable">Pilih pekerjaan prioritas, pengguna, alat, batas, dan penanggung jawab.</p></article>
+            <article class="feedback-node fn-work"><span>02 · GUNAKAN</span><h3>Pekerjaan nyata</h3><p class="editable">Masukkan AI ke proses kerja sehari-hari.</p></article>
+            <article class="feedback-node fn-evidence"><span>03 · UKUR</span><h3>Perubahan</h3><p class="editable">Bandingkan waktu, jumlah pekerjaan, kualitas, dan insiden sebelum–sesudah.</p></article>
+            <div class="feedback-return"><span>04 · PERBAIKI</span><strong>Lanjutkan, ubah, atau hentikan berdasarkan hasil.</strong></div>
+            <div class="feedback-principle editable">Jangan menghitung lisensi sebagai hasil. <b>Ukur perubahan pada pekerjaan.</b></div>
           </div><div class="slide-no">16 / 17</div>
         </div>
       </section>
@@ -1057,8 +1057,6 @@
     const orbitCore=document.getElementById('orbitCore'),orbitCoreText=document.getElementById('orbitCoreText');
     const orbitStates=['NILAI<br>+<br>KENDALI','PRODUKTIVITAS<br>+<br>KUALITAS','KAPASITAS<br>+<br>TANGGUNG JAWAB'];let orbitState=0;
     orbitCore.addEventListener('click',()=>{orbitState=(orbitState+1)%orbitStates.length;orbitCoreText.innerHTML=orbitStates[orbitState];orbitCore.animate([{transform:'scale(.92)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.16,1,.3,1)'});});
-    const policyTitle=document.getElementById('policyTitle'),policyDetail=document.getElementById('policyDetail');
-    document.querySelectorAll('.policy-node').forEach(node=>{const activate=()=>{document.querySelectorAll('.policy-node').forEach(n=>n.classList.remove('active'));node.classList.add('active');policyTitle.textContent=node.dataset.policyTitle;policyDetail.textContent=node.dataset.policyDetail;};node.addEventListener('mouseenter',activate);node.addEventListener('focus',activate);node.addEventListener('click',activate);});
     document.getElementById('verifyClaim').addEventListener('click',()=>{document.getElementById('reportSheet').classList.toggle('verified');document.getElementById('verifyClaim').textContent=document.getElementById('reportSheet').classList.contains('verified')?'Hasil: klaim tidak didukung':'Periksa klaim 18%';});
 
     /* ===========================================
